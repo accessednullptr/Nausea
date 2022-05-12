@@ -72,4 +72,8 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
-Content/**
+
+# All content but custom editor icons.
+Content/**/*.umap
+Content/**/*.uasset
+!Content/Editor/Icons/**
