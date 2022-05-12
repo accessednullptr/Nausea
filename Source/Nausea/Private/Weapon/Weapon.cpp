@@ -235,48 +235,19 @@ EFireMode UWeapon::GetFireModeEnum(UFireMode* FireMode) const
 	{
 		return EFireMode::MAX;
 	}
-
-	if (FireMode == PrimaryFire)
-	{
-		return EFireMode::Primary;
-	}
-
-	TSubclassOf<UFireMode> FireModeClass = FireMode->GetClass();
-
-	for (const TPair<EFireMode, TSubclassOf<UFireMode>>& WeaponFireModeEntry : WeaponFireModeList)
-	{
-		if (WeaponFireModeEntry.Value == FireModeClass)
-		{
-			return WeaponFireModeEntry.Key;
-		}
-	}
-
-	return EFireMode::MAX;
+	
+	const int32 Index = FireModeList.Find(FireMode);
+	return Index != INDEX_NONE ? static_cast<EFireMode>(Index) : EFireMode::MAX;
 }
 
 EFireMode UWeapon::GetAmmoFireModeEnum(UAmmo* Ammo) const
 {
-	if (!Ammo)
+	if (!Ammo || !Ammo->GetOwningFireMode())
 	{
 		return EFireMode::MAX;
 	}
 
-	static auto ContainsAmmo = [Ammo](UFireMode* FireMode)->bool
-	{
-		if (UWeaponFireMode* WeaponFireMode = Cast<UWeaponFireMode>(FireMode))
-		{
-			return WeaponFireMode->GetAmmo() == Ammo;
-		}
-
-		return false;
-	};
-
-	if (ContainsAmmo(PrimaryFire))
-	{
-		return EFireMode::Primary;
-	}
-
-	return EFireMode::MAX;
+	return GetFireModeEnum(Ammo->GetOwningFireMode());
 }
 
 bool UWeapon::Equip()

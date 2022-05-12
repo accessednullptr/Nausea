@@ -297,10 +297,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = UI)
 	TSoftClassPtr<UWeaponUserWidget> InventoryItemWidget;
 
-	//Publicly-facing firemode list for configuration purposes.
-	UPROPERTY(EditDefaultsOnly, Category = Weapon)
-	TMap<EFireMode, TSubclassOf<UFireMode>> WeaponFireModeList;
-
 	UPROPERTY(EditDefaultsOnly, Instanced, Category = FireMode)
 	UFireMode* PrimaryFire = nullptr;
 	UPROPERTY(EditDefaultsOnly, Instanced, Category = FireMode)
