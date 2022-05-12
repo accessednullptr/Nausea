@@ -1,0 +1,96 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{D68C009C-4367-8D56-93BA-3196145F260F}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "Nausea",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"CoreUObject",
+				"UMG",
+				"AIModule",
+				"ChaosVehicles"
+			]
+		},
+		{
+			"Name": "NauseaEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"UnrealEd"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "MagicLeapMedia",
+			"Enabled": false,
+			"SupportedTargetPlatforms": [
+				"Lumin"
+			]
+		},
+		{
+			"Name": "MagicLeap",
+			"Enabled": false,
+			"SupportedTargetPlatforms": [
+				"Lumin",
+				"Mac",
+				"Win64"
+			]
+		},
+		{
+			"Name": "MagicLeapPassableWorld",
+			"Enabled": false,
+			"SupportedTargetPlatforms": [
+				"Lumin",
+				"Mac",
+				"Win64"
+			]
+		},
+		{
+			"Name": "LuminPlatformFeatures",
+			"Enabled": false,
+			"SupportedTargetPlatforms": [
+				"Lumin"
+			]
+		},
+		{
+			"Name": "SoundUtilities",
+			"Enabled": true
+		},
+		{
+			"Name": "TimeSynth",
+			"Enabled": true
+		},
+		{
+			"Name": "SoundCueTemplates",
+			"Enabled": true
+		},
+		{
+			"Name": "GameplayAbilities",
+			"Enabled": true
+		},
+		{
+			"Name": "ChaosVehiclesPlugin",
+			"Enabled": true
+		},
+		{
+			"Name": "PhysXVehicles",
+			"Enabled": false
+		},
+		{
+			"Name": "ReplicationGraph",
+			"Enabled": true
+		}
+	],
+	"TargetPlatforms": [
+		"AllDesktop",
+		"WindowsNoEditor",
+		"LinuxNoEditor",
+		"MacNoEditor"
+	]
+}
