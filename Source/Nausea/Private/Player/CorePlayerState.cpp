@@ -42,7 +42,8 @@ bool ACorePlayerState::ReplicateSubobjects(class UActorChannel* Channel, class F
 		{
 			RepFlags->bNetInitial = Channel->ReplicationMap.Find(Component) == nullptr;
 			WroteSomething |= Component->ReplicateSubobjects(Channel, Bunch, RepFlags);
-			WroteSomething |= Channel->ReplicateSubobject(Component, *Bunch, *RepFlags);
+
+			WroteSomething = Channel->ReplicateSubobject(Component, *Bunch, *RepFlags) || WroteSomething;
 		}
 	}
 

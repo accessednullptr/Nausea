@@ -67,7 +67,6 @@ void UPlayerClassComponent::Serialize(FArchive& Ar)
 void UPlayerClassComponent::PostNetReceive()
 {
 	Super::PostNetReceive();
-	bHasReceivedVariant = true;
 }
 
 void UPlayerClassComponent::BeginPlay()
@@ -87,12 +86,10 @@ void UPlayerClassComponent::BeginPlay()
 
 	if (GetOwnerRole() != ROLE_Authority)
 	{
-		if (bHasReceivedVariant)
-		{
-			InitializePlayerClass();
-			OwningPlayerState->SetPlayerClassComponent(this);
-		}
 		Super::BeginPlay();
+		
+		ensure(Variant != EPlayerClassVariant::Invalid);
+		OnRep_Variant();
 		return;
 	}
 
@@ -324,14 +321,12 @@ void UPlayerClassComponent::OnRep_ExperiencePercent()
 
 void UPlayerClassComponent::OnRep_Variant()
 {
-	if (!HasBegunPlay())
+	if (bHasReceivedVariant || !HasBegunPlay())
 	{
-		bHasReceivedVariant = true;
 		return;
 	}
 
-	ensure(OwningPlayerState);
-	
+	bHasReceivedVariant = true;
 	InitializePlayerClass();
 	OwningPlayerState->SetPlayerClassComponent(this);
 }
