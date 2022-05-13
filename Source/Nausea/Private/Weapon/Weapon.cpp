@@ -108,35 +108,20 @@ bool UWeapon::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FRep
 {
 	SCOPE_CYCLE_COUNTER(STAT_WeaponReplicateSubobjects);
 
-	bool bWroteSomething = false;
-
 	const bool bIsRelevantWeapon = RepFlags && (RepFlags->bNetInitial || bReplicateFireModesWhenInactive || IsCurrentlyEquippedWeapon());
-	const bool bCachedNetInitial = RepFlags->bNetInitial;
 
-	for (UFireMode* FireMode : FireModeList)
+	if (!bIsRelevantWeapon)
 	{
-		//We have to check here if a given FireMode is replicated or not because a listen server will populate ones that do not intend to be replicated.
-		if (!FireMode || !FireMode->IsReplicated())
+		if (HasPendingReplicatedSubobjects(Channel))
 		{
-			continue;
+			const bool bWroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+			return ReplicateSubobjectList(Channel, Bunch, RepFlags) || bWroteSomething;
 		}
 
-		RepFlags->bNetInitial = Channel->ReplicationMap.Find(FireMode) == nullptr;
-
-		if (bIsRelevantWeapon || RepFlags->bNetInitial)
-		{
-			bWroteSomething = Channel->ReplicateSubobject(FireMode, *Bunch, *RepFlags) || bWroteSomething;
-		}
-
-		if (bIsRelevantWeapon || FireMode->HasPendingReplicatedSubobjects(Channel))
-		{
-			bWroteSomething = FireMode->ReplicateSubobjectList(Channel, Bunch, RepFlags) || bWroteSomething;
-		}
+		return false;
 	}
-
-	RepFlags->bNetInitial = bCachedNetInitial;
-
-	return Super::ReplicateSubobjects(Channel, Bunch, RepFlags) || bWroteSomething;
+	
+	return ReplicateSubobjectList(Channel, Bunch, RepFlags);
 }
 
 bool UWeapon::IsCurrentlyEquippedWeapon() const
