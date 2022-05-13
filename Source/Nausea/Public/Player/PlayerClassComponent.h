@@ -145,6 +145,9 @@ protected:
 	UFUNCTION()
 	void OnReceiveExperienceUpdate(UPlayerStatisticsComponent* PlayerStatistics, TSubclassOf<UPlayerClassComponent> TargetPlayerClass, EPlayerClassVariant TargetVariant, uint64 Delta);
 
+	UFUNCTION()
+	void CheckRemoteReady();
+
 public:
 	UPROPERTY(BlueprintAssignable, Category = PlayerClass)
 	FLevelChangedSignature OnLevelChanged;
@@ -216,8 +219,6 @@ protected:
 
 	UPROPERTY(Transient, ReplicatedUsing = OnRep_Variant)
 	EPlayerClassVariant Variant = EPlayerClassVariant::Invalid;
-	UPROPERTY(Transient)
-	bool bHasReceivedVariant = false;
 
 	UPROPERTY(EditDefaultsOnly, Instanced, Category = "Core", meta=(DisplayName="Tier 1 Core Skill"))
 	UPlayerClassSkill* Tier1CoreSkill;
@@ -260,6 +261,9 @@ protected:
 	UPROPERTY()
 	TArray<UPlayerClassSkill*> AlternativeSkillList;
 
+	UPROPERTY(Transient)
+	bool bInitialized = false;
+
 	UPROPERTY(EditDefaultsOnly, meta=(TitleProperty = "SourceName"), Category = Experience)
 	TArray<FExperienceSourceEntry> ExperienceSourceList;
 
@@ -268,7 +272,7 @@ protected:
 
 private:
 	UPROPERTY(Transient, ReplicatedUsing = OnRep_Level)
-	int32 Level = -1;
+	int32 Level = INDEX_NONE;
 
 	UPROPERTY(EditDefaultsOnly, Category = Class)
 	int32 MaxLevel = 10;

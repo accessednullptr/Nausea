@@ -87,9 +87,7 @@ void UPlayerClassComponent::BeginPlay()
 	if (GetOwnerRole() != ROLE_Authority)
 	{
 		Super::BeginPlay();
-		
-		ensure(Variant != EPlayerClassVariant::Invalid);
-		OnRep_Variant();
+		CheckRemoteReady();
 		return;
 	}
 
@@ -311,6 +309,7 @@ void UPlayerClassComponent::ProcessInitialInventoryList(TArray<TSubclassOf<UInve
 
 void UPlayerClassComponent::OnRep_Level()
 {
+	CheckRemoteReady();
 	OnLevelChanged.Broadcast(this, Level);
 }
 
@@ -321,18 +320,13 @@ void UPlayerClassComponent::OnRep_ExperiencePercent()
 
 void UPlayerClassComponent::OnRep_Variant()
 {
-	if (bHasReceivedVariant || !HasBegunPlay())
-	{
-		return;
-	}
-
-	bHasReceivedVariant = true;
-	InitializePlayerClass();
-	OwningPlayerState->SetPlayerClassComponent(this);
+	CheckRemoteReady();
 }
 
 void UPlayerClassComponent::InitializePlayerClass()
 {
+	bInitialized = true;
+
 	TArray<UPlayerClassSkill*> ActiveSkillList = GetActiveSkillList();
 
 	for (UPlayerClassSkill* Skill : ActiveSkillList)
@@ -380,6 +374,29 @@ void UPlayerClassComponent::OnReceiveExperienceUpdate(UPlayerStatisticsComponent
 				WeakThis->OnReceiveExperienceUpdate(WeakThis->GetPlayerStatisticsComponent(), WeakThis->GetClass(), WeakThis->GetVariant(), 0);
 			}
 		}), 5.f, false);
+}
+
+void UPlayerClassComponent::CheckRemoteReady()
+{
+	//Waiting for init.
+	if (!HasBegunPlay() || !OwningPlayerState)
+	{
+		return;
+	}
+
+	//Waiting for properties.
+	if (Variant == EPlayerClassVariant::Invalid || Level == INDEX_NONE)
+	{
+		return;
+	}
+
+	if (bInitialized)
+	{
+		return;
+	}
+
+	InitializePlayerClass();
+	OwningPlayerState->SetPlayerClassComponent(this);
 }
 
 inline const UPlayerClassComponent* GetPlayerClassCDO(TSubclassOf<UPlayerClassComponent> PlayerClass)
