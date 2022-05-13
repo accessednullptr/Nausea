@@ -73,7 +73,10 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-# All content but custom editor icons.
+# All content but custom editor icons
 Content/**/*.umap
 Content/**/*.uasset
 !Content/Editor/Icons/**
+
+# VS temp files
+enc_temp_folder/*

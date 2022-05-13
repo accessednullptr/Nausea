@@ -1,3 +1,3 @@
-// Copyright 2020-2021 Heavy Mettle Interactive. All Rights Reserved.
+// Copyright 2020-2022 Heavy Mettle Interactive. Published under the MIT License.
 
 #pragma once

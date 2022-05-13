@@ -1,4 +1,4 @@
-// Copyright 2021 Heavy Mettle Interactive. All Rights Reserved.
+// Copyright 2021 Heavy Mettle Interactive. Published under the MIT License.
 
 #pragma once
 
