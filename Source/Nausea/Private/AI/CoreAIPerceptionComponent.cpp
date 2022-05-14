@@ -197,17 +197,7 @@ void UCoreAIPerceptionComponent::OnPerceptionUpdate(AActor* Actor, FAIStimulus S
 	{
 		if (Stimulus.IsActive())
 		{
-			UE_LOG(LogActor, Warning, TEXT("strength: %f"), Stimulus.Strength);
 			OnReceivedDamageFromActor.Broadcast(this, Actor, Stimulus.Strength);
-		}
-		else
-		{
-
-			UE_LOG(LogActor, Warning, TEXT("Strength: %f | Age: %f | Sensed: %s | Type: %s"),
-				Stimulus.Strength, Stimulus.GetAge(), Stimulus.WasSuccessfullySensed() ? *FString("TRUE") : *FString("FALSE"), *Stimulus.Type.Name.ToString());
-			
-			UE_LOG(LogActor, Warning, TEXT("Description: %s"), *Stimulus.GetDebugDescription());
-			ensure(false);
 		}
 	}
 }
