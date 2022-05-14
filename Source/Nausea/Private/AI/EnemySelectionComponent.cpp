@@ -2,6 +2,7 @@
 
 
 #include "AI/EnemySelectionComponent.h"
+#include "Engine/Public/EngineUtils.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "AI/CoreAIController.h"
