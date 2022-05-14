@@ -7,6 +7,7 @@
 #include "Rendering/SkeletalMeshRenderData.h"
 #include "Animation/Skeleton.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Engine/Public/SkeletalMeshMerge.h"
 #include "System/NauseaGameInstance.h"
 #include "Character/Customization/CustomizationObject.h"
 
@@ -48,7 +49,6 @@ FMeshMergeHandle UCustomizationMergeManager::RequestMeshMerge(const UObject* Wor
 		return FMeshMergeHandle();
 	}
 
-	/*
 	FMeshMergeHandle ExistingMergeHandle = Manager->GetMergedMeshFromCustomizationSet(MeshList);
 
 	if (ExistingMergeHandle.IsValid())
@@ -69,7 +69,6 @@ FMeshMergeHandle UCustomizationMergeManager::RequestMeshMerge(const UObject* Wor
 	{
 		return ExistingMergeHandle;
 	}
-	*/
 
 	if (Manager->ActiveMergeList.Num() > 0)
 	{
@@ -236,14 +235,8 @@ void UCustomizationMergeManager::PerformMeshMerge(FActiveMergeRequest& Request, 
 
 	TargetMesh->SetSkeleton(SkeletalMeshList[0]->GetSkeleton());
 	TargetMesh->SetPhysicsAsset(SkeletalMeshList[0]->GetPhysicsAsset());
-
-#if WITH_EDITOR
-	const ENamedThreads::Type NamedThread = ENamedThreads::GameThread;
-#else
-	const ENamedThreads::Type NamedThread = ENamedThreads::GameThread;
-#endif //WITH_EDITOR
 	
-	AsyncTask(NamedThread, [WeakThis, Handle, TargetMesh, SkeletalMeshList, SectionMapping]()
+	AsyncTask(ENamedThreads::GameThread, [WeakThis, Handle, TargetMesh, SkeletalMeshList, SectionMapping]()
 	{
 		if (!WeakThis.IsValid() || !TargetMesh.IsValid())
 		{
@@ -252,7 +245,6 @@ void UCustomizationMergeManager::PerformMeshMerge(FActiveMergeRequest& Request, 
 
 		QUICK_SCOPE_CYCLE_COUNTER(STAT_Customization_PerformMerge);
 		FSkeletalMeshMerge SkeletalMeshMerger(TargetMesh.Get(), SkeletalMeshList, SectionMapping.Get(), 0, EMeshBufferAccess::Default, nullptr);
-		SkeletalMeshMerger.MarkMergeDestinationMeshClean();
 
 		{
 			QUICK_SCOPE_CYCLE_COUNTER(STAT_Customization_MergeSkeleton);
@@ -384,12 +376,4 @@ FMeshMergeHandle UCustomizationMergeManager::GetPendingMergeRequestFromCustomiza
 	}
 
 	return FMeshMergeHandle();
-}
-
-void FMeshMergerWorker::DoWork()
-{
-	TArray<FSkelMeshMergeSectionMapping> Mapping;
-	FSkeletalMeshMerge SkeletalMeshMerger(TargetMesh.Get(), SourceMeshList, Mapping, 0, EMeshBufferAccess::Default, nullptr);
-	SkeletalMeshMerger.MarkMergeDestinationMeshClean();
-	SkeletalMeshMerger.DoMerge();
 }

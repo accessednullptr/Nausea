@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Async/AsyncWork.h"
 #include "MeshMergeTypes.generated.h"
 
 class UCustomizationAsset;
@@ -159,31 +158,6 @@ struct FPendingMergeRequest : public FMergeRequest
 	}
 
 };
-
-DECLARE_STATS_GROUP(TEXT("Mesh Merger"), STATGROUP_MeshMerger, STATCAT_Advanced);
-class FMeshMergerWorker : public FNonAbandonableTask
-{
-public:
-	FMeshMergerWorker(FMeshMergeHandle InHandle, TSharedPtr<USkeletalMesh> InTargetMesh, const TArray<USkeletalMesh*>& InSourceMeshList)
-		: Handle(InHandle),
-		TargetMesh(InTargetMesh),
-		SourceMeshList(InSourceMeshList)
-	{
-
-	}
-
-	FORCEINLINE TStatId GetStatId() const
-	{
-		RETURN_QUICK_DECLARE_CYCLE_STAT(FMeshMergerWorker, STATGROUP_MeshMerger);
-	}
-
-	void DoWork();
-
-	FMeshMergeHandle Handle = FMeshMergeHandle();
-	TSharedPtr<USkeletalMesh> TargetMesh = nullptr;
-	TArray<USkeletalMesh*> SourceMeshList = TArray<USkeletalMesh*>();
-};
-typedef FAsyncTask<FMeshMergerWorker> FMeshMergerTask;
 
 USTRUCT()
 struct FActiveMergeRequest : public FMergeRequest
