@@ -9,6 +9,8 @@
 #include "System/ReplicatedObjectInterface.h"
 #include "Ammo.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogAmmo, Warning, All);
+
 class UFireMode;
 class ACoreCharacter;
 class UAmmoUserWidget;

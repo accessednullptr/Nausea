@@ -4,7 +4,6 @@
 #include "Weapon/InventoryManagerComponent.h"
 #include "Internationalization/StringTableRegistry.h"
 #include "GameFramework/GameStateBase.h"
-#include "Nausea.h"
 #include "System/NetHelper.h"
 #include "System/CoreGameplayStatics.h"
 #include "Player/NauseaPlayerState.h"
@@ -16,6 +15,8 @@
 #include "Weapon/Inventory.h"
 #include "Weapon/Weapon.h"
 #include "Character/VoiceComponent.h"
+
+DEFINE_LOG_CATEGORY(LogInventoryManager);
 
 //Helper log. Should be used after an event log to describe general state information about a given weapon.
 #define LOG_WEAPON_STATE(WeaponVariable, Verbosity)\

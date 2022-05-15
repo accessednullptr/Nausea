@@ -4,7 +4,6 @@
 #include "Internationalization/StringTableRegistry.h"
 #include "Engine/ActorChannel.h"
 #include "Animation/AnimInstance.h"
-#include "Nausea.h"
 #include "System/NetHelper.h"
 #include "Character/CoreCharacter.h"
 #include "Character/CoreCharacterAnimInstanceTypes.h"
@@ -13,6 +12,8 @@
 #include "Weapon/FireMode.h"
 #include "Weapon/FireMode/WeaponFireMode.h"
 #include "Weapon/FireMode/Ammo.h"
+
+DEFINE_LOG_CATEGORY(LogWeapon);
 
 DECLARE_STATS_GROUP(TEXT("Weapon"), STATGROUP_Weapon, STATCAT_Advanced);
 

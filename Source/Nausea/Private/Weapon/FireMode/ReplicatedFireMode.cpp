@@ -4,7 +4,6 @@
 #include "Weapon/FireMode/ReplicatedFireMode.h"
 #include "Engine/NetDriver.h"
 #include "GameFramework/GameStateBase.h"
-#include "Nausea.h"
 #include "System/NetHelper.h"
 #include "Character/CoreCharacter.h"
 #include "Weapon/Weapon.h"

@@ -6,9 +6,9 @@
 #include "Engine/NetSerialization.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
+#include "NauseaHelpers.h"
 #include "Character/CoreCharacterComponent.h"
 #include "GenericTeamAgentInterface.h"
-#include "Nausea.h"
 #include "Gameplay/Ability/AbilityTypes.h"
 #include "AbilityComponent.generated.h"
 

@@ -4,12 +4,14 @@
 #include "Weapon/FireMode/Ammo.h"
 #include "Net/UnrealNetwork.h"
 #include "Engine/NetDriver.h"
-#include "Nausea.h"
 #include "System/NetHelper.h"
+#include "System/CoreGameplayStatics.h"
 #include "Character/CoreCharacter.h"
 #include "Player/PlayerClassComponent.h"
 #include "Weapon/Weapon.h"
 #include "Weapon/FireMode/WeaponFireMode.h"
+
+DEFINE_LOG_CATEGORY(LogAmmo);
 
 UAmmo::UAmmo(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

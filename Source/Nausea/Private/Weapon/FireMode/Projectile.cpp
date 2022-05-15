@@ -6,7 +6,6 @@
 #include "GameFramework/GameStateBase.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/PhysicsVolume.h"
-#include "Nausea.h"
 #include "System/NetHelper.h"
 #include "System/CoreGameplayStatics.h"
 #include "Character/CoreCharacter.h"

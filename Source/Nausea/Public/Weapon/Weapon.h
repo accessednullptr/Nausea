@@ -10,6 +10,8 @@
 #include "System/ReplicatedObjectInterface.h"
 #include "Weapon.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogWeapon, Warning, All);
+
 class UFireMode;
 class UAmmo;
 class USkeletalMesh;
@@ -353,6 +355,25 @@ private:
 	FTimerHandle PutDownTimer;
 
 public:
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	static TArray<TSubclassOf<UWeapon>> SortWeaponClassList(const TArray<TSubclassOf<UWeapon>>& WeaponClassList) { TArray<TSubclassOf<UWeapon>> SortedList = WeaponClassList; SortedList.Sort(UWeapon::FSortByPriority()); return SortedList; }
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	static TArray<UWeapon*> SortWeaponList(const TArray<UWeapon*>& WeaponList) { TArray<UWeapon*> SortedList = WeaponList; SortedList.Sort(UWeapon::FSortByPriority()); return SortedList; }
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	static FText GetWeaponNameFromClass(TSubclassOf<UWeapon> WeaponClass);
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	static FText GetWeaponDescriptionFromClass(TSubclassOf<UWeapon> WeaponClass);
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	static TSoftObjectPtr<UTexture> GetInventoryItemImageFromClass(TSubclassOf<UWeapon> WeaponClass);
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	static EWeaponGroup GetWeaponGroupFromClass(TSubclassOf<UWeapon> WeaponClass);
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	static FText GetWeaponStateName(EWeaponState State);
+	
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	static FText GetFireModeName(EFireMode FireMode);
 
 	struct FSortByPriority
 	{
@@ -399,24 +420,4 @@ public:
 			return A->GetUniqueID() < B->GetUniqueID();
 		}
 	};
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	static TArray<TSubclassOf<UWeapon>> SortWeaponClassList(const TArray<TSubclassOf<UWeapon>>& WeaponClassList) { TArray<TSubclassOf<UWeapon>> SortedList = WeaponClassList; SortedList.Sort(UWeapon::FSortByPriority()); return SortedList; }
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	static TArray<UWeapon*> SortWeaponList(const TArray<UWeapon*>& WeaponList) { TArray<UWeapon*> SortedList = WeaponList; SortedList.Sort(UWeapon::FSortByPriority()); return SortedList; }
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	static FText GetWeaponNameFromClass(TSubclassOf<UWeapon> WeaponClass);
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	static FText GetWeaponDescriptionFromClass(TSubclassOf<UWeapon> WeaponClass);
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	static TSoftObjectPtr<UTexture> GetInventoryItemImageFromClass(TSubclassOf<UWeapon> WeaponClass);
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	static EWeaponGroup GetWeaponGroupFromClass(TSubclassOf<UWeapon> WeaponClass);
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	static FText GetWeaponStateName(EWeaponState State);
-	
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	static FText GetFireModeName(EFireMode FireMode);
 };

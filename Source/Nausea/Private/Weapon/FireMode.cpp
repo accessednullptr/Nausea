@@ -4,9 +4,9 @@
 #include "Weapon/FireMode.h"
 #include "Net/UnrealNetwork.h"
 #include "System/CoreGameplayStatics.h"
-#include "Nausea.h"
 #include "System/NetHelper.h"
 #include "Weapon/Weapon.h"
+#include "Player/CorePlayerState.h"
 #include "Character/CoreCharacter.h"
 #include "NauseaHelpers.h"
 
@@ -14,6 +14,8 @@
 #include "Editor.h"
 extern UNREALED_API UEditorEngine* GEditor;
 #endif
+
+DEFINE_LOG_CATEGORY(LogFireMode);
 
 UFireMode::UFireMode(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

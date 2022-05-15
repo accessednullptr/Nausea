@@ -7,6 +7,8 @@
 #include "WeaponTypes.h"
 #include "InventoryManagerComponent.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogInventoryManager, Warning, All);
+
 class UInputComponent;
 class ACorePlayerState;
 class UPlayerClassComponent;

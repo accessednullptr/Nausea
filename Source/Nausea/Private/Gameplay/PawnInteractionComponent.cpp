@@ -4,7 +4,7 @@
 #include "Gameplay/PawnInteractionComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/WidgetComponent.h"
-#include "Nausea.h"
+#include "NauseaHelpers.h"
 #include "System/NetHelper.h"
 #include "Character/CoreCharacter.h"
 #include "Player/CorePlayerController.h"

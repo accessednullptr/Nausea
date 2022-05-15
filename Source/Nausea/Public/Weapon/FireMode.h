@@ -10,6 +10,8 @@
 #include "System/ReplicatedObjectInterface.h"
 #include "FireMode.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogFireMode, Warning, All);
+
 class UWeapon;
 class ACoreCharacter;
 
