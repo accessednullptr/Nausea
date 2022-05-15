@@ -5,7 +5,6 @@
 #include "Navigation/CrowdManager.h"
 #include "DrawDebugHelpers.h"
 #include "AIConfig.h"
-#include "Nausea.h"
 #include "AI/CoreAIController.h"
 #include "AI/CoreAIPerceptionSystem.h"
 #include "AI/CoreAIPerceptionComponent.h"

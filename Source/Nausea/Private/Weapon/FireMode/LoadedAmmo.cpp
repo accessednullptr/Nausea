@@ -6,6 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "Nausea.h"
 #include "System/NetHelper.h"
+#include "System/CoreGameplayStatics.h"
 #include "Character/CoreCharacter.h"
 #include "Player/PlayerClassComponent.h"
 #include "Character/CoreCharacterAnimInstanceTypes.h"

@@ -1,7 +1,6 @@
 // Copyright 1998-2019 Epic Games, Inc. Published under the MIT License.
 
 #include "System/NauseaGameMode.h"
-#include "Nausea.h"
 #include "System/NauseaGameState.h"
 #include "Player/NauseaPlayerState.h"
 #include "System/NauseaLevelScriptActor.h"

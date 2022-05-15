@@ -3,7 +3,6 @@
 
 #include "Gameplay/InteractableInterface.h"
 #include "Gameplay/InteractableComponent.h"
-#include "Nausea.h"
 
 DECLARE_CYCLE_STAT(TEXT("Requesting UInteractableInterfaceStatics::RemoveDeadData call from within a const function"),
 	STAT_FSimpleDelegateGraphTask_RequestingRemovalOfDeadInteractableData,

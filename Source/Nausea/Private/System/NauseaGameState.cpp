@@ -1,10 +1,10 @@
 // Copyright 2020-2022 Heavy Mettle Interactive. Published under the MIT License.
 
 #include "System/NauseaGameState.h"
-#include "Nausea.h"
 #include "System/NetHelper.h"
 #include "System/NauseaLevelScriptActor.h"
 #include "Player/NauseaPlayerState.h"
+#include "Player/PlayerClassComponent.h"
 #include "Objective/MissionComponent.h"
 
 ANauseaGameState::ANauseaGameState(const FObjectInitializer& ObjectInitializer)

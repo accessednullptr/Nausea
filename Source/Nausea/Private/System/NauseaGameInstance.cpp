@@ -2,7 +2,6 @@
 
 
 #include "System/NauseaGameInstance.h"
-#include "Nausea.h"
 #include "System/NauseaAssetManager.h"
 #include "System/NauseaWorldSettings.h"
 #include "System/MapDataAsset.h"

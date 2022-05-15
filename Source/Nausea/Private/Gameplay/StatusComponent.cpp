@@ -6,7 +6,6 @@
 #include "Engine/ActorChannel.h"
 #include "Perception/AIPerceptionSystem.h"
 #include "Perception/AISense_Damage.h"
-#include "Nausea.h"
 #include "NauseaHelpers.h"
 #include "System/NetHelper.h"
 #include "Gameplay/StatusInterface.h"
@@ -18,6 +17,7 @@
 #include "Player/CorePlayerState.h"
 #include "Player/PlayerClassComponent.h"
 #include "Player/PlayerStatistics/PlayerStatisticsComponent.h"
+#include "Weapon/Weapon.h"
 #include "Weapon/FireMode.h"
 #include "Gameplay/DamageLogModifier/DamageLogModifierObject.h"
 

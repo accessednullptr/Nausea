@@ -3,7 +3,6 @@
 
 #include "Gameplay/StatusInterface.h"
 #include "Gameplay/StatusComponent.h"
-#include "Nausea.h"
 
 UStatusInterface::UStatusInterface(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

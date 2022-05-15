@@ -3,7 +3,6 @@
 
 #include "Character/Pilot/VehicleInterface.h"
 #include "Character/Pilot/VehicleComponent.h"
-#include "Nausea.h"
 
 UVehicleInterface::UVehicleInterface(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
