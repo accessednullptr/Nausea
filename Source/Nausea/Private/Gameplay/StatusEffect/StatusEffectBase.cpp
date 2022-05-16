@@ -3,12 +3,12 @@
 
 #include "Gameplay/StatusEffect/StatusEffectBase.h"
 #include "Engine/NetDriver.h"
-#include "System/NetHelper.h"
+#include "NauseaGlobalDefines.h"
+#include "NauseaNetDefines.h"
 #include "Gameplay/StatusComponent.h"
 #include "Character/CoreCharacter.h"
 #include "Character/CoreCharacterAnimInstanceTypes.h"
 #include "GameFramework/GameState.h"
-#include "NauseaHelpers.h"
 
 #if WITH_EDITOR
 #include "Editor.h"

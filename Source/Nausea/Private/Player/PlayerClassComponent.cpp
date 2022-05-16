@@ -4,7 +4,7 @@
 #include "Player/PlayerClassComponent.h"
 #include "Internationalization/StringTableRegistry.h"
 #include "Engine/ActorChannel.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Player/CorePlayerController.h"
 #include "Player/CorePlayerState.h"
 #include "Player/PlayerStatistics/PlayerStatisticsComponent.h"

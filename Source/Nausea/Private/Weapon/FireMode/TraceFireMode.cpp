@@ -2,6 +2,7 @@
 
 
 #include "Weapon/FireMode/TraceFireMode.h"
+#include "NauseaGlobalDefines.h"
 #include "Character/CoreCharacter.h"
 #include "Weapon/Weapon.h"
 #include "Gameplay/CoreDamageType.h"

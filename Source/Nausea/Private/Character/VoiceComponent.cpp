@@ -11,7 +11,7 @@
 #include "Components/AudioComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Player/CorePlayerController.h"
 #include "Player/CorePlayerState.h"
 #include "Character/CoreCharacter.h"

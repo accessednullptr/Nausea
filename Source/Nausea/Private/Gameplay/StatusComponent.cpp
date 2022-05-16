@@ -7,7 +7,7 @@
 #include "Perception/AIPerceptionSystem.h"
 #include "Perception/AISense_Damage.h"
 #include "NauseaHelpers.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Gameplay/StatusInterface.h"
 #include "Gameplay/StatusEffect/StatusEffectBase.h"
 #include "Gameplay/CoreDamageType.h"

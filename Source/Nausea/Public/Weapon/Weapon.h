@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NauseaHelpers.h"
+#include "AI/CoreAITypes.h"
 #include "WeaponTypes.h"
 #include "Weapon/Inventory.h"
 #include "Gameplay/DamageLogInterface.h"

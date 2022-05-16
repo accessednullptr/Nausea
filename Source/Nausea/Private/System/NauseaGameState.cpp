@@ -1,7 +1,7 @@
 // Copyright 2020-2022 Heavy Mettle Interactive. Published under the MIT License.
 
 #include "System/NauseaGameState.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/NauseaLevelScriptActor.h"
 #include "Player/NauseaPlayerState.h"
 #include "Player/PlayerClassComponent.h"

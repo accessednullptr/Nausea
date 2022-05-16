@@ -2,7 +2,7 @@
 
 
 #include "Gameplay/StatusEffect/StatusEffectShield.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Player/CorePlayerState.h"
 #include "Gameplay/StatusComponent.h"
 

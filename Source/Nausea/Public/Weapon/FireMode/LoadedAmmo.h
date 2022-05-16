@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Weapon/FireMode/Ammo.h"
+#include "AI/CoreAITypes.h"
 #include "LoadedAmmo.generated.h"
 
 /**

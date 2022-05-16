@@ -5,7 +5,7 @@
 #include "Engine/NetSerialization.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/Actor.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "AbilityTypes.generated.h"
 
 class UAbilityInfo;

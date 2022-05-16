@@ -2,7 +2,7 @@
 
 
 #include "AI/EnemyPhaseComponent.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 
 UEnemyPhaseComponent::UEnemyPhaseComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

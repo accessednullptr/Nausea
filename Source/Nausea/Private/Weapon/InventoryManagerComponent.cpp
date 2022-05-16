@@ -4,7 +4,7 @@
 #include "Weapon/InventoryManagerComponent.h"
 #include "Internationalization/StringTableRegistry.h"
 #include "GameFramework/GameStateBase.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/CoreGameplayStatics.h"
 #include "Player/NauseaPlayerState.h"
 #include "Player/PlayerClassComponent.h"

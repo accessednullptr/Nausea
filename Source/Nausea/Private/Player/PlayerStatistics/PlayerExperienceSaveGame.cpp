@@ -6,6 +6,9 @@
 #include "Engine/LocalPlayer.h"
 #include "Player/CorePlayerController.h"
 #include "Player/CorePlayerState.h"
+#include "Player/PlayerClassComponent.h"
+#include "Gameplay/StatusEffect/StatusEffectBase.h"
+#include "Weapon/Inventory.h"
 
 UPlayerExperienceSaveGame::UPlayerExperienceSaveGame(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

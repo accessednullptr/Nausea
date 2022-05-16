@@ -4,9 +4,10 @@
 #include "Player/CorePlayerState.h"
 #include "Net/UnrealNetwork.h"
 #include "Engine/ActorChannel.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/CoreGameState.h"
 #include "Player/PlayerClassComponent.h"
+#include "Character/VoiceComponent.h"
 
 ACorePlayerState::ACorePlayerState(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

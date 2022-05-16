@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NauseaHelpers.h"
+#include "AI/CoreAITypes.h"
 #include "Character/CoreCharacterComponent.h"
 #include "Inventory.generated.h"
 

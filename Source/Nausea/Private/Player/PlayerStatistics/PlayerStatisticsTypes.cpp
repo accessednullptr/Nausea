@@ -4,6 +4,8 @@
 #include "Player/PlayerStatistics/PlayerStatisticsTypes.h"
 #include "Player/PlayerOwnershipInterface.h"
 #include "Player/PlayerStatistics/PlayerStatisticsComponent.h"
+#include "Player/PlayerClassComponent.h"
+#include "Weapon/Inventory.h"
 
 const TMap<TSoftClassPtr<UPlayerClassComponent>, uint64> FExperienceStruct::InvalidExperienceStruct = TMap<TSoftClassPtr<UPlayerClassComponent>, uint64>();
 

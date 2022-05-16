@@ -4,7 +4,7 @@
 #include "Gameplay/AbilityComponent.h"
 #include "GameFramework/GameStateBase.h"
 #include "Materials/MaterialInstanceDynamic.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Animation/AnimInstance.h"
 #include "Animation/AnimMontage.h"
 #include "Gameplay/Ability/AbilityDecalComponent.h"

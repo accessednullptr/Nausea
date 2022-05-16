@@ -8,6 +8,7 @@
 #include "PlayerStatisticsTypes.generated.h"
 
 class UPlayerClassComponent;
+class UStatusEffectBase;
 
 template<typename InKeyType, typename InValueType>
 struct TMapPairStruct
@@ -86,7 +87,7 @@ public:
 	uint64& operator[] (EPlayerClassVariant Variant) { return VariantExperienceMap[Variant]; }
 	const uint64& operator[] (EPlayerClassVariant Variant) const { return VariantExperienceMap[Variant]; }
 
-	FORCEINLINE const uint64& GetValue(EPlayerClassVariant Variant) const;
+	const uint64& GetValue(EPlayerClassVariant Variant) const;
 
 	uint64 AddValue(EPlayerClassVariant Variant, uint64 Delta);
 	uint64 SetValue(EPlayerClassVariant Variant, uint64 InValue);
@@ -127,7 +128,7 @@ public:
 
 	bool IsValid(const FVariantExperienceMap& ExperienceValue) const; //Checks if a given reference to an uint64 is a valid one (not a reference to FExperienceStruct::InvalidExperienceValue.
 
-	FORCEINLINE const uint64& GetValue(TSoftClassPtr<UPlayerClassComponent> PlayerClass, EPlayerClassVariant Variant) const;
+	const uint64& GetValue(TSoftClassPtr<UPlayerClassComponent> PlayerClass, EPlayerClassVariant Variant) const;
 
 	uint64 AddValue(TSoftClassPtr<UPlayerClassComponent> PlayerClass, EPlayerClassVariant Variant, uint64 Delta);
 	uint64 SetValue(TSoftClassPtr<UPlayerClassComponent> PlayerClass, EPlayerClassVariant Variant, uint64 InValue);
@@ -135,7 +136,7 @@ public:
 	FORCEINLINE const TMap<TSoftClassPtr<UPlayerClassComponent>, FVariantExperienceMap>& Get() const { return PlayerClassExperienceMap; }
 	FORCEINLINE TMap<TSoftClassPtr<UPlayerClassComponent>, FVariantExperienceMap>& Get() { return PlayerClassExperienceMap; }
 
-	FORCEINLINE bool ReplaceWithLarger(const FExperienceStruct& Other);
+	bool ReplaceWithLarger(const FExperienceStruct& Other);
 
 protected:
 	UPROPERTY(NotReplicated)
@@ -179,7 +180,7 @@ struct FPlayerStatisticsStruct
 	FORCEINLINE const TMap<EPlayerStatisticType, uint64>& Get() const { return PlayerStatisticMap; }
 	FORCEINLINE TMap<EPlayerStatisticType, uint64>& GetMutable() { return PlayerStatisticMap; }
 
-	FORCEINLINE bool ReplaceWithLarger(const FPlayerStatisticsStruct& Other);
+	bool ReplaceWithLarger(const FPlayerStatisticsStruct& Other);
 
 protected:
 	UPROPERTY(NotReplicated)
@@ -286,7 +287,7 @@ struct FPlayerSelectionStruct
 	FORCEINLINE TMap<TSoftClassPtr<UPlayerClassComponent>, FPlayerClassSelectionMap>& GetInventorySelectionMutable() { return InventorySelectionMap; }
 
 	FORCEINLINE const TSoftClassPtr<UPlayerClassComponent>& GetSelectedPlayerClass() const { return SelectedPlayerClass; }
-	FORCEINLINE bool SetSelectedPlayerClass(TSoftClassPtr<UPlayerClassComponent> InSelectedPlayerClass);
+	bool SetSelectedPlayerClass(TSoftClassPtr<UPlayerClassComponent> InSelectedPlayerClass);
 
 	FORCEINLINE const TMap<TSoftClassPtr<UPlayerClassComponent>, EPlayerClassVariant>& GetPlayerClassVariantSelection() const { return SelectedPlayerClassVariantMap; }
 	FORCEINLINE TMap<TSoftClassPtr<UPlayerClassComponent>, EPlayerClassVariant>& GetPlayerClassVariantSelectionMutable() { return SelectedPlayerClassVariantMap; }
@@ -310,8 +311,6 @@ struct TStructOpsTypeTraits<FPlayerSelectionStruct> : public TStructOpsTypeTrait
 		WithNetSerializer = true
 	};
 };
-
-class UStatusEffectBase;
 
 USTRUCT(BlueprintType)
 struct FPlayerLocalDataStruct

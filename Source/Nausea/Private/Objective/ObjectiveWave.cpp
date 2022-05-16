@@ -4,7 +4,7 @@
 #include "Objective/ObjectiveWave.h"
 #include "Internationalization/StringTableRegistry.h"
 #include "GameFramework/GameModeBase.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/SpawnCharacterSystem.h"
 #include "Objective/WaveConfig/WaveSpawnLocationInterface.h"
 #include "Character/CoreCharacter.h"

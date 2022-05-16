@@ -4,11 +4,11 @@
 #include "Weapon/FireMode.h"
 #include "Net/UnrealNetwork.h"
 #include "System/CoreGameplayStatics.h"
-#include "System/NetHelper.h"
+#include "NauseaGlobalDefines.h"
+#include "NauseaNetDefines.h"
 #include "Weapon/Weapon.h"
 #include "Player/CorePlayerState.h"
 #include "Character/CoreCharacter.h"
-#include "NauseaHelpers.h"
 
 #if WITH_EDITOR
 #include "Editor.h"

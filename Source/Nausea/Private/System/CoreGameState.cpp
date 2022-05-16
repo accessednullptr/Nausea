@@ -5,7 +5,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "NauseaHelpers.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/CoreGameMode.h"
 #include "System/SpawnCharacterSystem.h"
 #include "Player/CorePlayerState.h"

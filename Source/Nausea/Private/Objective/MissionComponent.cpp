@@ -4,7 +4,7 @@
 #include "Objective/MissionComponent.h"
 #include "Engine/ActorChannel.h"
 #include "Engine/LevelScriptActor.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/NauseaGameState.h"
 #include "Objective/Objective.h"
 

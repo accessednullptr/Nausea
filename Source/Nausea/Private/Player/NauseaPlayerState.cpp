@@ -2,7 +2,7 @@
 
 
 #include "Player/NauseaPlayerState.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Player/PlayerOwnershipInterfaceTypes.h"
 
 ANauseaPlayerState::ANauseaPlayerState(const FObjectInitializer& ObjectInitializer)

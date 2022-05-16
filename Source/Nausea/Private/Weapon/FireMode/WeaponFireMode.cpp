@@ -4,7 +4,7 @@
 #include "Engine/ActorChannel.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/GameStateBase.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Character/CoreCharacter.h"
 #include "Player/PlayerClassComponent.h"
 #include "Weapon/Weapon.h"

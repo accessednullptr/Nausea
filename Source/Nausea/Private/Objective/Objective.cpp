@@ -4,7 +4,7 @@
 #include "Objective/Objective.h"
 #include "Engine/NetDriver.h"
 #include "Engine/ActorChannel.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/NauseaGameState.h"
 #include "Objective/MissionComponent.h"
 

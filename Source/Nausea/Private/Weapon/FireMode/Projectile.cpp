@@ -4,15 +4,23 @@
 #include "Weapon/FireMode/Projectile.h"
 #include "Components/PrimitiveComponent.h"
 #include "GameFramework/GameStateBase.h"
-#include "DrawDebugHelpers.h"
 #include "GameFramework/PhysicsVolume.h"
-#include "System/NetHelper.h"
+#include "NauseaGlobalDefines.h"
+#include "NauseaNetDefines.h"
 #include "System/CoreGameplayStatics.h"
 #include "Character/CoreCharacter.h"
 #include "Player/CorePlayerState.h"
 #include "Weapon/Weapon.h"
 #include "Weapon/FireMode.h"
 #include "Gameplay/CoreDamageType.h"
+
+#if NAUSEA_DEBUG_DRAW
+#include "DrawDebugHelpers.h"
+
+static TAutoConsoleVariable<bool> CVarDrawProjectileCorrection(TEXT("nausea.drawprojectilecorrection"),
+	false, TEXT("Draw projectile corrections when they occur."), ECVF_Cheat);
+#endif //NAUSEA_DEBUG_DRAW
+
 
 AProjectile::AProjectile(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -177,12 +185,12 @@ void AProjectileSimple::TickActor(float DeltaTime, ELevelTick TickType, FActorTi
 
 float AProjectileSimple::CalculateImpactDamage(const FHitResult& HitResult, uint8 PenentrationCount) const
 {
-	if (!ImpactDamageType)
+	if (!GetImpactDamageType())
 	{
 		return 0.f;
 	}
 
-	const UCoreDamageType* DamageTypeCDO = ImpactDamageType.GetDefaultObject();
+	const UCoreDamageType* DamageTypeCDO = GetImpactDamageType().GetDefaultObject();
 
 	if (!DamageTypeCDO)
 	{
@@ -260,7 +268,12 @@ bool AProjectileSimple::HandleProjectileImpact(const FHitResult& HitResult)
 		return true;
 	}
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), 10.f, 4, HasAuthority() ? FColor::Red : FColor::Green, true, 2.f, 0, 2.f);
+#if NAUSEA_DEBUG_DRAW
+	if (CVarDrawProjectileCorrection.GetValueOnAnyThread())
+	{
+		DrawDebugSphere(GetWorld(), GetActorLocation(), 10.f, 4, HasAuthority() ? FColor::Red : FColor::Green, true, 2.f, 0, 2.f);
+	}
+#endif //NAUSEA_DEBUG_DRAW
 
 	const FVector& ImpactNormal = HitResult.ImpactNormal;
 	Velocity = Velocity.MirrorByVector(ImpactNormal) * BounceSpeedMultiplier;
@@ -287,8 +300,14 @@ void AProjectileSimple::HandleFinalProjectileImpact(const FHitResult& HitResult)
 {
 	Velocity = FVector::ZeroVector;
 	bHandledFinalImpact = true;
+	
+#if NAUSEA_DEBUG_DRAW
+	if (CVarDrawProjectileCorrection.GetValueOnAnyThread())
+	{
+		DrawDebugSphere(GetWorld(), GetActorLocation(), 20.f, 4, HasAuthority() ? FColor::Red : FColor::Green, true, 2.f, 0, 2.f);
+	}
+#endif //NAUSEA_DEBUG_DRAW
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), 20.f, 4, HasAuthority() ? FColor::Red : FColor::Green, true, 2.f, 0, 2.f);
 	if (HasAuthority())
 	{
 		SetLifeSpan(0.01f);
@@ -312,7 +331,7 @@ void AProjectileSimple::ApplyImpactDamage(const FHitResult& HitResult)
 	const FVector ShotDirection = (HitResult.TraceEnd - HitResult.TraceStart).GetSafeNormal();
 
 	UCoreGameplayStatics::ApplyWeaponPointDamage(HitResult.Actor.Get(), CalculateImpactDamage(HitResult, PenetrationCount),
-		GetInstigatorWeaponClass(), GetClass(), ShotDirection, HitResult, GetOwningController(), this, ImpactDamageType);
+		GetInstigatorWeaponClass(), GetClass(), ShotDirection, HitResult, GetOwningController(), this, GetImpactDamageType());
 }
 
 void AProjectileSimple::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -358,7 +377,24 @@ AProjectileSimpleExplosive::AProjectileSimpleExplosive(const FObjectInitializer&
 
 }
 
-void AProjectileSimpleExplosive::Explode()
+float AProjectileSimpleExplosive::CalculateExplosiveDamage() const
+{
+	if (!GetExplosiveDamageType())
+	{
+		return 0.f;
+	}
+
+	const UCoreDamageType* DamageTypeCDO = GetExplosiveDamageType().GetDefaultObject();
+
+	if (!DamageTypeCDO)
+	{
+		return 0.f;
+	}
+
+	return DamageTypeCDO->GetDamageAmount();
+}
+
+void AProjectileSimpleExplosive::Explode(const FVector& ExplosionNormal, const FDamageEvent& InstigatorDamageEvent)
 {
 	const FVector Location = GetActorLocation();
 
@@ -367,9 +403,9 @@ void AProjectileSimpleExplosive::Explode()
 		return;
 	}
 
-	//UCoreGameplayStatics::ApplyWeaponRadialDamageWithFalloff(this, )
-
-	FCollisionShape Sphere = FCollisionShape::MakeSphere(ExplosiveInnerRadius + ExplosiveOuterRadius);
-
-	//GetWorld()->OverlapAnyTestByChannel(Location, FQuat::Identity, ECC_Pawn, )
+	TArray<AActor*> IgnoreActors = { this };
+	
+	UCoreGameplayStatics::ApplyWeaponRadialDamageWithFalloff(this, CalculateExplosiveDamage(), InstigatorWeaponClass, InstigatorFireModeClass,
+		CalculateExplosiveDamage(), Location, ExplosiveInnerRadius, ExplosiveOuterRadius, 1.f,
+		GetExplosiveDamageType(), IgnoreActors, this, GetInstigatorController());
 }

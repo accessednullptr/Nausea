@@ -2,7 +2,7 @@
 
 
 #include "System/MainMenuGameState.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/MapDataAsset.h"
 
 AMainMenuGameState::AMainMenuGameState(const FObjectInitializer& ObjectInitializer)

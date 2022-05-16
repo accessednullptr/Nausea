@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "NauseaHelpers.h"
 #include "Weapon/WeaponTypes.h"
 #include "System/ReplicatedObjectInterface.h"
 #include "Ammo.generated.h"

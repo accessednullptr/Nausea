@@ -129,6 +129,8 @@ public:
 	uint8 GetMaxBounceCount() const { return MaxBounceCount; }
 
 	UFUNCTION()
+	TSubclassOf<UCoreDamageType> GetImpactDamageType() const { return ImpactDamageType; }
+	UFUNCTION()
 	float CalculateImpactDamage(const FHitResult& HitResult, uint8 PenentrationCount) const;
 
 protected:
@@ -206,6 +208,12 @@ class NAUSEA_API AProjectileSimpleExplosive : public AProjectileSimple
 	GENERATED_UCLASS_BODY()
 
 public:
+	UFUNCTION()
+	TSubclassOf<UCoreDamageType> GetExplosiveDamageType() const { return ExplosiveDamageType; }
+
+	UFUNCTION()
+	float CalculateExplosiveDamage() const;
+
 	virtual float GetExplosiveRadius() const { return FMath::Max(ExplosiveInnerRadius, ExplosiveOuterRadius); }
 	virtual float GetExplosiveInnerRadius() const { return ExplosiveInnerRadius; }
 	virtual float GetExplosiveOuterRadius() const { return ExplosiveOuterRadius; }
@@ -213,9 +221,11 @@ public:
 	bool HasExploded() const { return bHasExploded; }
 
 protected:
-	virtual void Explode();
+	virtual void Explode(const FVector& ExplosionNormal, const FDamageEvent& InstigatorDamageEvent);
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<UCoreDamageType> ExplosiveDamageType = nullptr;
 	UPROPERTY(EditDefaultsOnly, Category = Explosive)
 	float ExplosiveInnerRadius = 0.f;
 	UPROPERTY(EditDefaultsOnly, Category = Explosive)

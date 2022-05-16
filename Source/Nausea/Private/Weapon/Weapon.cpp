@@ -4,7 +4,7 @@
 #include "Internationalization/StringTableRegistry.h"
 #include "Engine/ActorChannel.h"
 #include "Animation/AnimInstance.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Character/CoreCharacter.h"
 #include "Character/CoreCharacterAnimInstanceTypes.h"
 #include "Player/PlayerClassComponent.h"

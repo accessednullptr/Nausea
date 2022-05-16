@@ -4,7 +4,7 @@
 #include "Weapon/FireMode/LoadedAmmo.h"
 #include "GameFramework/GameStateBase.h"
 #include "Animation/AnimInstance.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/CoreGameplayStatics.h"
 #include "Character/CoreCharacter.h"
 #include "Player/PlayerClassComponent.h"

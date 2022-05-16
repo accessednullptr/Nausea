@@ -2,7 +2,7 @@
 
 
 #include "Character/Pilot/VehicleSeatComponent.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Character/PilotCharacter.h"
 #include "Character/Pilot/VehicleComponent.h"
 

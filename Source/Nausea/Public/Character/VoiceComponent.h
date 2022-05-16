@@ -6,7 +6,7 @@
 #include "GameplayTags.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
-#include "NauseaHelpers.h"
+#include "AI/CoreAITypes.h"
 #include "Character/CoreCharacterComponent.h"
 #include "VoiceComponent.generated.h"
 

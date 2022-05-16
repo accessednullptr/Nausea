@@ -2,7 +2,7 @@
 
 
 #include "Gameplay/InteractableComponent.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "Gameplay/PawnInteractionComponent.h"
 #include "Gameplay/InteractableInterface.h"
 

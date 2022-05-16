@@ -4,8 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "Player/PlayerClass/PlayerClassTypes.h"
 #include "Player/PlayerStatistics/PlayerStatisticsTypes.h"
 #include "PlayerExperienceSaveGame.generated.h"
+
+class UInventory;
+class UStatusEffectBase;
+class UPlayerClassComponent;
+class ACorePlayerController;
 
 UENUM(BlueprintType)
 enum class ESaveGameType : uint8
@@ -99,7 +105,7 @@ public:
 	uint64 AddPlayerStatisticsValue(EPlayerStatisticType StatisticsType, uint64 Delta);
 
 	UFUNCTION()
-	bool CheckAndMarkStatusEffectReceived(TSubclassOf<class UStatusEffectBase> StatusEffectClass);
+	bool CheckAndMarkStatusEffectReceived(TSubclassOf<UStatusEffectBase> StatusEffectClass);
 
 public:
 	DECLARE_EVENT_OneParam(UPlayerExperienceSaveGame, FOnSelectedPlayerClassChanged, TSubclassOf<UPlayerClassComponent>)

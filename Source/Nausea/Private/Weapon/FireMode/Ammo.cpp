@@ -4,7 +4,7 @@
 #include "Weapon/FireMode/Ammo.h"
 #include "Net/UnrealNetwork.h"
 #include "Engine/NetDriver.h"
-#include "System/NetHelper.h"
+#include "NauseaNetDefines.h"
 #include "System/CoreGameplayStatics.h"
 #include "Character/CoreCharacter.h"
 #include "Player/PlayerClassComponent.h"
