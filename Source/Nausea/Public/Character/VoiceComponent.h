@@ -432,7 +432,7 @@ public:
 * Container of USoundWave setup in UVoiceDataObject loaded once put on a UVoiceComponent.
 */
 UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
-class NAUSEA_API USoundWaveContainer : public UObject
+class USoundWaveContainer : public UObject
 {
 	GENERATED_UCLASS_BODY()
 

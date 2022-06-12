@@ -15,7 +15,7 @@ class UStatusComponent;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FActorTakeDamage, AActor*, Actor, float&, Damage, struct FDamageEvent const&, DamageEvent, AController*, EventInstigator, AActor*, DamageCauser);
 
 UINTERFACE(Blueprintable)
-class UStatusInterface : public UInterface
+class NAUSEA_API UStatusInterface : public UInterface
 {
 	GENERATED_UINTERFACE_BODY()
 };
@@ -40,8 +40,8 @@ protected:
 	void K2_Died(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 };
 
-UCLASS(Abstract, MinimalAPI)
-class UStatusInterfaceStatics : public UBlueprintFunctionLibrary
+UCLASS(Abstract)
+class NAUSEA_API UStatusInterfaceStatics : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 

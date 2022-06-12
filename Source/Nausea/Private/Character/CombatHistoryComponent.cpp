@@ -101,7 +101,7 @@ void UCombatHistoryComponent::ProcessDamageLogEvent(const FDamageLogEvent& Damag
 inline bool CanCombine(const FDamageLogEvent& A, const FDamageLogEvent& B)
 {
 	if (A.Instigator == B.Instigator && A.InstigatorWeaponClass == B.InstigatorWeaponClass
-		&& A.InstigatorFireModeClass == B.InstigatorFireModeClass && A.InstigatorDamageType == B.InstigatorDamageType)
+		/* && A.InstigatorFireModeClass == B.InstigatorFireModeClass */ && A.InstigatorDamageType == B.InstigatorDamageType)
 	{
 		return false;
 	}

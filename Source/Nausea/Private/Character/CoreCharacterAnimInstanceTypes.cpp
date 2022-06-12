@@ -328,6 +328,14 @@ bool UAnimationObject::PlayStatusStartMontage(UStatusEffectBase* StatusEffect, U
 
 	if (SectionIndex == INDEX_NONE)
 	{
+		if (!bRestartOnRefresh)
+		{
+			const float StatusTimeRemaining = StatusEffect->GetStatusTimeRemaining();
+			FTimerHandle LoopEndHandle;
+			StatusEffect->GetWorld()->GetTimerManager().SetTimer(LoopEndHandle, StatusTimeRemaining, false);
+			AnimInstance->RegisterMontageLoopTimerHandle(StatusMontage, LoopEndHandle);
+		}
+
 		return true;
 	}
 
@@ -390,7 +398,7 @@ bool UAnimationObject::PlayStatusEndMontage(UStatusEffectBase* StatusEffect, UCo
 	}
 
 	AnimInstance->RevokeMontageLoopTimerHandle(StatusMontage);
-	AnimInstance->Montage_Stop(0.1f, StatusMontage);
+	AnimInstance->Montage_Stop(StatusEffectAnimations.StatusMap[StatusEffect->GetStatusType()].StopBlendTime, StatusMontage);
 
 	return true;
 }

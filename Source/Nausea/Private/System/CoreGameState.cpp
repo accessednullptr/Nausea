@@ -82,7 +82,7 @@ void ACoreGameState::OnRep_MatchState()
 
 void ACoreGameState::InitializeGameState(ACoreGameMode* CoreGameMode)
 {
-	GameDifficulty = UGameplayStatics::GetIntOption(CoreGameMode->OptionsString, ACoreGameMode::OptionDifficulty, CoreGameMode->DefaultDifficulty);
+	GameDifficulty = UGameplayStatics::GetIntOption(CoreGameMode->OptionsString, ACoreGameMode::OptionDifficulty, CoreGameMode->GetDefaultGameDifficulty());
 }
 
 void ACoreGameState::OnPlayerStateReady(ACorePlayerState* PlayerState)

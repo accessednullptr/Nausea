@@ -51,7 +51,7 @@ UInteractableComponent* UInteractableInterfaceStatics::GetInteractableComponent(
 	{
 		FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
 			FSimpleDelegateGraphTask::FDelegate::CreateUObject(InteractableInterfaceStaticCDO, &UInteractableInterfaceStatics::RemoveDeadData),
-			GET_STATID(STAT_FSimpleDelegateGraphTask_RequestingRemovalOfDeadInteractableData), NULL, ENamedThreads::GameThread);
+			GET_STATID(STAT_FSimpleDelegateGraphTask_RequestingRemovalOfDeadInteractableData), nullptr, ENamedThreads::GameThread);
 	}
 
 	if (InteractableInterfaceStaticCDO->CachedInteractableComponentMap.Contains(Target.GetObject()) && InteractableInterfaceStaticCDO->CachedInteractableComponentMap[Target.GetObject()].IsValid())

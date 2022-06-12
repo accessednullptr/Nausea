@@ -46,6 +46,12 @@ public:
     UPROPERTY(Transient, BlueprintReadOnly, Category = CoreCharacterAnimInstanceProxy)
     bool bRunJumping = false;
 
+    UPROPERTY(Transient, BlueprintReadOnly, Category = CoreCharacterAnimInstanceProxy)
+    bool bDead = false;
+
+    UPROPERTY(Transient, BlueprintReadOnly, Category = CoreCharacterAnimInstanceProxy)
+    bool bIsLowLOD = false;
+
 
 protected:
 	virtual void PreUpdate(UAnimInstance* InAnimInstance, float DeltaSeconds) override;

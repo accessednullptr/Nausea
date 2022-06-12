@@ -328,7 +328,7 @@ private:
 };
 
 UCLASS()
-class UWaveEndKillDamageType : public UCoreDamageType
+class NAUSEA_API UWaveEndKillDamageType : public UCoreDamageType
 {
 	GENERATED_UCLASS_BODY()
 };

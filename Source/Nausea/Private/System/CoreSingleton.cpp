@@ -57,3 +57,82 @@ void UCoreSingleton::UnbindFromSingletonTick(const UObject* WorldContextObject, 
 		Singleton->SingletonTickCallbackList.Remove(Delegate);
 	}
 }
+
+void UCoreSingleton::RegisterActorWithTag(const UObject* WorldContextObject, AActor* Actor, const FGameplayTagContainer& Tag)
+{
+	if (!Actor)
+	{
+		return;
+	}
+
+	if (UCoreSingleton* Singleton = GetSingleton(WorldContextObject))
+	{
+		for (const FGameplayTag& IndividualTag : Tag)
+		{
+			Singleton->ActorGameplayTagMap.FindOrAdd(IndividualTag).Add(Actor);
+		}
+	}
+}
+
+void UCoreSingleton::UnregisterActorWithTag(const UObject* WorldContextObject, AActor* Actor, const FGameplayTagContainer& Tag)
+{
+	if (!Actor)
+	{
+		return;
+	}
+
+	if (UCoreSingleton* Singleton = GetSingleton(WorldContextObject))
+	{
+		TArray<FGameplayTag> RemovableTagEntryList;
+
+		for (const FGameplayTag& IndividualTag : Tag)
+		{
+			if (!Singleton->ActorGameplayTagMap.Contains(IndividualTag))
+			{
+				continue;
+			}
+
+			TArray<TWeakObjectPtr<AActor>>& TaggedActorList = Singleton->ActorGameplayTagMap[IndividualTag];
+			TaggedActorList.Remove(Actor);
+
+			if (TaggedActorList.Num() == 0)
+			{
+				RemovableTagEntryList.Add(IndividualTag);
+			}
+		}
+
+		for (const FGameplayTag& IndividualTag : RemovableTagEntryList)
+		{
+			Singleton->ActorGameplayTagMap.Remove(IndividualTag);
+		}
+	}
+}
+
+void UCoreSingleton::GetActorsWithTag(const UObject* WorldContextObject, TArray<AActor*>& ActorList, const FGameplayTagContainer& Tag)
+{
+	ActorList.Reset();
+	
+	if (UCoreSingleton* Singleton = GetSingleton(WorldContextObject))
+	{
+		for (const FGameplayTag& IndividualTag : Tag)
+		{
+			if (!Singleton->ActorGameplayTagMap.Contains(IndividualTag))
+			{
+				continue;
+			}
+
+			const TArray<TWeakObjectPtr<AActor>>& TaggedActorList = Singleton->ActorGameplayTagMap[IndividualTag];
+			ActorList.Reserve(ActorList.Num() + TaggedActorList.Num());
+
+			for (const TWeakObjectPtr<AActor>& Actor : TaggedActorList)
+			{
+				if (!Actor.IsValid())
+				{
+					continue;
+				}
+
+				ActorList.Add(Actor.Get());
+			}
+		}
+	}
+}

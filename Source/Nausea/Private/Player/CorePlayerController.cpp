@@ -2,6 +2,7 @@
 
 
 #include "Player/CorePlayerController.h"
+#include "Engine/LocalPlayer.h"
 #include "GameFramework/GameMode.h"
 #include "GameplayTagContainer.h"
 #include "NauseaHelpers.h"
@@ -15,6 +16,7 @@
 #include "Gameplay/StatusComponent.h"
 #include "Player/PlayerClassComponent.h"
 #include "Player/CorePlayerCameraManager.h"
+#include "Weapon/Inventory.h"
 
 const FName ACorePlayerController::MessageTypeSay = FName(TEXT("Say"));
 const FName ACorePlayerController::MessageTypeTeamSay = FName(TEXT("TeamSay"));

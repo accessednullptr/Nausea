@@ -6,7 +6,6 @@
 #include "Tickable.h"
 #include "AITypes.h"
 #include "Gameplay/StatusType.h"
-#include "Player/PlayerClass/PlayerClassTypes.h"
 #include "Gameplay/DamageLogInterface.h"
 #include "System/ReplicatedObjectInterface.h"
 #include "StatusEffectBase.generated.h"
@@ -146,6 +145,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = StatusEffect)
 	void UnblockCharacterActions();
 
+	//Used by AI. Determines if this character should be ignored by crowd manager.
+	UFUNCTION(BlueprintCallable, Category = StatusEffect)
+	void SetIgnoredByCrowdManager(bool bInIgnoredByCrowdManager);
+	UFUNCTION(BlueprintCallable, Category = StatusEffect)
+	void ResetIgnoredByCrowdManager();
+
+	//Used by AI. Determines if panic movement (random location for some set amount of time) should be used.
+	UFUNCTION(BlueprintCallable, Category = StatusEffect)
+	void SetPerformPanicMovement(bool bInPerformPanicMovement);
+	UFUNCTION(BlueprintCallable, Category = StatusEffect)
+	void ResetPerformPanicMovement();
+
 	UFUNCTION(BlueprintCallable, Category = StatusEffect, meta = (DisplayName="Get Instigation Direction", ScriptName="GetInstigationDirection"))
 	FVector K2_GetInsitgationDirection() const { return GetInstigationDirection(); }
 	const FVector_NetQuantizeNormal& GetInstigationDirection() const { return StatusEffectInstigationDirection; }
@@ -206,6 +217,11 @@ protected:
 	TMap<EStatusEffectStatModifier, FStatusEffectDelegateEntry> StatusModificationMap;
 	UPROPERTY(Transient)
 	int32 BlockActionID = 0;
+
+	UPROPERTY(Transient)
+	bool bIgnoredByCrowdManager = false;
+	UPROPERTY(Transient)
+	bool bPerformingPanicMovement = false;
 
 	UPROPERTY(ReplicatedUsing = OnRep_StatusEffectInsitgator)
 	ACorePlayerState* StatusEffectInsitgator = nullptr;

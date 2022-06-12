@@ -17,7 +17,7 @@ class UDamageLogInterface : public UInterface
 /**
  * 
  */
-class NAUSEA_API IDamageLogInterface
+class  IDamageLogInterface
 {
 	GENERATED_IINTERFACE_BODY()
 

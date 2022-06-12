@@ -3,6 +3,9 @@
 
 #include "Gameplay/DamageLogInterface.h"
 #include "Internationalization/StringTableRegistry.h"
+#include "Weapon/Weapon.h"
+#include "Weapon/FireMode.h"
+#include "Gameplay/CoreDamageType.h"
 #include "NauseaHelpers.h"
 
 UDamageLogInterface::UDamageLogInterface(const FObjectInitializer& ObjectInitializer)
@@ -77,7 +80,11 @@ FText UDamageLogStatics::GetDamageLogModificationText(FDamageLogEventModifier Da
 }
 
 static FText DamageLogEventText = LOCTABLE("/Game/Localization/DamageLogStringTable.DamageLogStringTable", "Event");
+
 static FText DamageLogEventWithWeaponText = LOCTABLE("/Game/Localization/DamageLogStringTable.DamageLogStringTable", "Event_WithWeapon");
+static FText DamageLogEventWithWeaponFireModeText = LOCTABLE("/Game/Localization/DamageLogStringTable.DamageLogStringTable", "Event_WithWeaponAndFireMode");
+
+static FText DamageLogEventWithDamageType = LOCTABLE("/Game/Localization/DamageLogStringTable.DamageLogStringTable", "Event_WithWeapon");
 FText UDamageLogStatics::GenerateDamageLogEventText(const FDamageLogEvent& DamageLogEvent)
 {
 	TScriptInterface<IDamageLogInterface> InstigatorInterface = GetCDOFromObjectOrClass(DamageLogEvent.Instigator.Get());
@@ -86,12 +93,32 @@ FText UDamageLogStatics::GenerateDamageLogEventText(const FDamageLogEvent& Damag
 		return FText::GetEmpty();
 	}
 
-	TScriptInterface<IDamageLogInterface> WeaponInterface = GetCDOFromObjectOrClass(DamageLogEvent.InstigatorWeaponClass.Get());
-	if (TSCRIPTINTERFACE_IS_VALID(WeaponInterface))
+	if (TSubclassOf<UWeapon> WeaponClass = TSubclassOf<UWeapon>(Cast<UClass>(DamageLogEvent.InstigatorWeaponClass.Get())))
 	{
+		/*
+		if (DamageLogEvent.InstigatorFireModeClass)
+		{
+			return FText::FormatNamed(DamageLogEventWithWeaponText,
+				TEXT("Instigator"), GetDamageLogInstigatorName(InstigatorInterface),
+				TEXT("Weapon"), DamageLogEvent.InstigatorWeaponClass.GetDefaultObject()->GetDamageLogInstigatorName(),
+				//TEXT("FireMode"), DamageLogEvent.InstigatorFireModeClass.GetDefaultObject()->GetDamageLogInstigatorName(), Needs implementation on firemode.
+				TEXT("Amount"), DamageLogEvent.DamageDealt,
+				TEXT("InitialAmount"), DamageLogEvent.DamageInitial);
+		}
+		*/
+
 		return FText::FormatNamed(DamageLogEventWithWeaponText,
 			TEXT("Instigator"), GetDamageLogInstigatorName(InstigatorInterface),
-			TEXT("Weapon"), GetDamageLogInstigatorName(WeaponInterface),
+			TEXT("Weapon"), WeaponClass.GetDefaultObject()->GetDamageLogInstigatorName(),
+			TEXT("Amount"), DamageLogEvent.DamageDealt,
+			TEXT("InitialAmount"), DamageLogEvent.DamageInitial);
+	}
+
+	if (DamageLogEvent.InstigatorDamageType)
+	{
+		return FText::FormatNamed(DamageLogEventWithDamageType,
+			TEXT("Instigator"), GetDamageLogInstigatorName(InstigatorInterface),
+			TEXT("DamageType"), DamageLogEvent.InstigatorDamageType.GetDefaultObject()->GetDamageLogInstigatorName(),
 			TEXT("Amount"), DamageLogEvent.DamageDealt,
 			TEXT("InitialAmount"), DamageLogEvent.DamageInitial);
 	}

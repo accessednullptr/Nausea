@@ -15,7 +15,9 @@
 #include "Player/NauseaCameraComponent.h"
 #include "Character/CoreCharacterMovementComponent.h"
 #include "Gameplay/PlayerOwnedStatusComponent.h"
+#include "Gameplay/CoreDamageType.h"
 #include "Weapon/InventoryManagerComponent.h"
+#include "Gameplay/AbilityComponent.h"
 #include "Gameplay/PawnInteractionComponent.h"
 #include "Player/CoreWidgetInteractionComponent.h"
 #include "Character/VoiceComponent.h"
@@ -51,62 +53,91 @@ ACoreCharacter::ACoreCharacter(const FObjectInitializer& ObjectInitializer)
 	CoreMovementComponent = Cast<UCoreCharacterMovementComponent>(GetCharacterMovement());
 
 	StatusComponent = CreateDefaultSubobject<UPlayerOwnedStatusComponent>(TEXT("StatusComponent"));
-	InventoryManager = CreateDefaultSubobject<UInventoryManagerComponent>(TEXT("InventoryManagerComponent"));
-	AbilityComponent = CreateDefaultSubobject<UAbilityComponent>(TEXT("AbilityComponent"));
+	InventoryManager = CreateOptionalDefaultSubobject<UInventoryManagerComponent>(TEXT("InventoryManagerComponent"));
+	AbilityComponent = CreateOptionalDefaultSubobject<UAbilityComponent>(TEXT("AbilityComponent"));
 
-	PawnInteractionComponent = CreateDefaultSubobject<UPawnInteractionComponent>(TEXT("PawnInteractionComponent"));
-	WidgetInteractionComponent = CreateDefaultSubobject<UCoreWidgetInteractionComponent>(TEXT("WidgetInteractionComponent"));
+	PawnInteractionComponent = CreateOptionalDefaultSubobject<UPawnInteractionComponent>(TEXT("PawnInteractionComponent"));
+	WidgetInteractionComponent = CreateOptionalDefaultSubobject<UCoreWidgetInteractionComponent>(TEXT("WidgetInteractionComponent"));
 
-	VoiceComponent = CreateDefaultSubobject<UVoiceComponent>(TEXT("VoiceComponent"));
+	VoiceComponent = CreateOptionalDefaultSubobject<UVoiceComponent>(TEXT("VoiceComponent"));
 
 	FirstPersonCamera = CreateDefaultSubobject<UNauseaCameraComponent>(TEXT("FirstPersonCamera"));
-	FirstPersonCamera->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCamera->SetRelativeLocation(FVector(0, 0, BaseEyeHeight));
-	FirstPersonCamera->bUsePawnControlRotation = true;
+	if (FirstPersonCamera)
+	{
+		FirstPersonCamera->SetupAttachment(GetCapsuleComponent());
+		FirstPersonCamera->SetRelativeLocation(FVector(0, 0, BaseEyeHeight));
+		FirstPersonCamera->bUsePawnControlRotation = true;
+	}
 
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("FollowCameraBoom"));
-	CameraBoom->TargetArmLength = 400.f;
-	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->SetupAttachment(GetMesh());
+	CameraBoom = CreateOptionalDefaultSubobject<USpringArmComponent>(TEXT("FollowCameraBoom"));
+	if (CameraBoom)
+	{
+		CameraBoom->TargetArmLength = 400.f;
+		CameraBoom->bUsePawnControlRotation = true;
+		CameraBoom->SetupAttachment(GetMesh());
 
-	FollowCamera = CreateDefaultSubobject<UNauseaCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(GetCameraBoom());
-	FollowCamera->bUsePawnControlRotation = false;
+		FollowCamera = CreateOptionalDefaultSubobject<UNauseaCameraComponent>(TEXT("FollowCamera"));
+		if (FollowCamera)
+		{
+			FollowCamera->SetupAttachment(GetCameraBoom());
+			FollowCamera->bUsePawnControlRotation = false;
+		}
+	}
 
-	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
-	WeaponMesh->SetupAttachment(GetMesh());
-	UpdatePlayerSkeletalMesh(WeaponMesh);
-	WeaponMesh->SetOnlyOwnerSee(false);
-	WeaponMesh->SetOwnerNoSee(true);
+	WeaponMesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
+	if (WeaponMesh)
+	{
+		WeaponMesh->SetupAttachment(GetMesh());
+		UpdatePlayerSkeletalMesh(WeaponMesh);
+		WeaponMesh->SetOnlyOwnerSee(false);
+		WeaponMesh->SetOwnerNoSee(true);
+	}
 
-	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh1P"));
-	Mesh1P->SetupAttachment(GetFirstPersonCamera());
-	UpdatePlayerSkeletalMesh(Mesh1P);
-	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->bAutoRegister = false;
-	Mesh1P->bAlwaysCreatePhysicsState = false;
+	Mesh1P = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh1P"));
+	if (Mesh1P)
+	{
+		Mesh1P->SetupAttachment(GetFirstPersonCamera());
+		UpdatePlayerSkeletalMesh(Mesh1P);
+		Mesh1P->SetOnlyOwnerSee(true);
+		Mesh1P->bAutoRegister = false;
+		Mesh1P->bAlwaysCreatePhysicsState = false;
+	}
 
-	WeaponMesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh1P"));
-	WeaponMesh1P->SetupAttachment(GetMesh1P());
-	UpdatePlayerSkeletalMesh(WeaponMesh1P);
-	WeaponMesh1P->SetOnlyOwnerSee(true);
-	WeaponMesh1P->bAutoRegister = false;
-	WeaponMesh1P->bAlwaysCreatePhysicsState = false;
+	WeaponMesh1P = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh1P"));
+	if (WeaponMesh1P)
+	{
+		WeaponMesh1P->SetupAttachment(GetMesh1P());
+		UpdatePlayerSkeletalMesh(WeaponMesh1P);
+		WeaponMesh1P->SetOnlyOwnerSee(true);
+		WeaponMesh1P->bAutoRegister = false;
+		WeaponMesh1P->bAlwaysCreatePhysicsState = false;
+	}
 
 	GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::OnlyTickMontagesWhenNotRendered;
 	GetMesh()->bEnablePhysicsOnDedicatedServer = false;
 	
 	GetMesh()->SetOwnerNoSee(true);
 	GetMesh()->SetOnlyOwnerSee(false);
-	GetWeaponMesh()->SetOwnerNoSee(true);
-	GetWeaponMesh()->SetOnlyOwnerSee(true);
 
-	GetMesh1P()->SetOwnerNoSee(false);
-	GetMesh1P()->SetOnlyOwnerSee(true);
-	GetMesh1P()->SetCastShadow(false);
-	GetWeaponMesh1P()->SetOwnerNoSee(false);
-	GetWeaponMesh1P()->SetOnlyOwnerSee(true);
-	GetWeaponMesh1P()->SetCastShadow(false);
+	if (GetWeaponMesh())
+	{
+		GetWeaponMesh()->SetOwnerNoSee(true);
+		GetWeaponMesh()->SetOnlyOwnerSee(true);
+	}
+
+	if (GetMesh1P())
+	{
+		GetMesh1P()->SetOwnerNoSee(false);
+		GetMesh1P()->SetOnlyOwnerSee(true);
+		GetMesh1P()->SetCastShadow(false);
+	}
+
+	if (GetWeaponMesh1P())
+	{
+		GetWeaponMesh1P()->SetOwnerNoSee(false);
+		GetWeaponMesh1P()->SetOnlyOwnerSee(true);
+		GetWeaponMesh1P()->SetCastShadow(false);
+	}
 
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
@@ -442,7 +473,7 @@ void ACoreCharacter::Died(float Damage, struct FDamageEvent const& DamageEvent, 
 	{
 		if (GetController())
 		{
-			GetController()->UnPossess();
+			GetController()->PawnPendingDestroy(this);
 		}
 
 		OnTargetableStateChanged.Broadcast(this, false);

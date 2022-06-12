@@ -6,7 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Perception/AISense_Sight.h"
 #include "AI/CoreAIController.h"
-#include "AI/NauseaAIPerceptionComponent.h"
+#include "AI/CoreAIPerceptionComponent.h"
 #include "Character/CoreCharacter.h"
 
 UPerceptionEnemyComponent::UPerceptionEnemyComponent(const FObjectInitializer& ObjectInitializer)

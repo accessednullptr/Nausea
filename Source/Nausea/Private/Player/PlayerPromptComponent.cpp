@@ -1,8 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2020-2022 Heavy Mettle Interactive. Published under the MIT License.
 
 
 #include "Player/PlayerPromptComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Player/CorePlayerController.h"
 #include "UI/PromptUserWidget.h"
 
 bool FPromptStack::IsValidPromptHandle(const FPromptHandle& PromptHandle) const

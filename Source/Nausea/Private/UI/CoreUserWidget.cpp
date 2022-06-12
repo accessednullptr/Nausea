@@ -53,13 +53,13 @@ bool UCoreUserWidget::Initialize()
 	return true;
 }
 
-void UCoreUserWidget::InitializeWidgetComponent(UNauseaWidgetComponent* OwningComponent)
+void UCoreUserWidget::InitializeWidgetComponent(UCoreWidgetComponent* OwningComponent)
 {
 	OwningWidgetComponent = OwningComponent;
 	OnReceivedWidgetComponent(OwningWidgetComponent);
 }
 
-UNauseaWidgetComponent* UCoreUserWidget::GetWidgetComponent() const
+UCoreWidgetComponent* UCoreUserWidget::GetWidgetComponent() const
 {
 	return OwningWidgetComponent;
 }

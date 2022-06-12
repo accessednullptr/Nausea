@@ -10,7 +10,7 @@
 class UVehicleComponent;
 class UVehicleSeatComponent;
 
-UINTERFACE(MinimalAPI)
+UINTERFACE()
 class UVehicleInterface : public UInterface
 {
 	GENERATED_UINTERFACE_BODY()
@@ -36,8 +36,8 @@ protected:
 	UMeshComponent* K2_GetVehicleMesh() const;
 };
 
-UCLASS(Abstract, MinimalAPI)
-class UVehicleInterfaceStatics : public UBlueprintFunctionLibrary
+UCLASS(Abstract)
+class NAUSEA_API UVehicleInterfaceStatics : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 

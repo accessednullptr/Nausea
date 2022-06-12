@@ -2,9 +2,9 @@
 
 
 #include "AI/EnemySelection/AggroEnemyComponent.h"
-#include "GameFramework/Pawn.h"
 #include "Player/PlayerOwnershipInterface.h"
 #include "Player/CorePlayerState.h"
+#include "Character/CoreCharacter.h"
 #include "AI/CoreAIPerceptionComponent.h"
 
 FAggroData::FAggroData(AActor* InActor, float InThreat)

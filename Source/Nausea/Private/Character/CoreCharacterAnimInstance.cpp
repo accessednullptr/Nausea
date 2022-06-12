@@ -36,6 +36,17 @@ void FCoreCharacterAnimInstanceProxy::PreUpdate(UAnimInstance* InAnimInstance, f
 
 			bJumping = CoreCharacter->bPressedJump || CoreCharacter->IsFalling();
 			bRunJumping = bJumping && bRunning;
+
+			bDead = CoreCharacter->IsDead();
+		}
+
+		if (CoreAnimInstance->GetSkelMeshComponent())
+		{
+			bIsLowLOD = InAnimInstance->GetSkelMeshComponent()->GetPredictedLODLevel() > 0;
+		}
+		else
+		{
+			bIsLowLOD = false;
 		}
 	}
 
@@ -102,11 +113,11 @@ const UAnimationObject* UCoreCharacterAnimInstance::GetCharacterAnimationObject(
 
 	if (bIsThirdPerson)
 	{
-		return GetCharacter()->GetThirdPersonAnimObject();
+		return GetCharacter()->GetThirdPersonAnimObject() ? GetCharacter()->GetThirdPersonAnimObject() : DefaultAnimationObject.GetDefaultObject();
 	}
 	else
 	{
-		return GetCharacter()->GetFirstPersonAnimObject();
+		return GetCharacter()->GetFirstPersonAnimObject() ? GetCharacter()->GetFirstPersonAnimObject() : DefaultAnimationObject.GetDefaultObject();
 	}
 }
 

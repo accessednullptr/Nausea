@@ -8,6 +8,8 @@
 #include "Gameplay/StatusComponent.h"
 #include "Character/CoreCharacter.h"
 #include "Character/CoreCharacterAnimInstanceTypes.h"
+#include "AI/CoreAIController.h"
+#include "AI/CorePathFollowingComponent.h"
 #include "GameFramework/GameState.h"
 
 #if WITH_EDITOR
@@ -26,7 +28,7 @@ void UStatusEffectBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	UBlueprintGeneratedClass* BPClass = Cast<UBlueprintGeneratedClass>(GetClass());
-	if (BPClass != NULL)
+	if (BPClass != nullptr)
 	{
 		BPClass->GetLifetimeBlueprintReplicationList(OutLifetimeProps);
 	}
@@ -178,6 +180,8 @@ void UStatusEffectBase::OnDeactivated(EStatusEndType EndType)
 	OwningStatusComponent->OnDied.RemoveDynamic(this, &UStatusEffectBase::OnOwnerDied);
 	ClearStatModifiers();
 	UnblockCharacterActions();
+	ResetIgnoredByCrowdManager();
+	ResetPerformPanicMovement();
 
 	if (GetWorld())
 	{
@@ -322,6 +326,70 @@ void UStatusEffectBase::UnblockCharacterActions()
 	{
 		StatusComponent->RevokeActionBlock(BlockActionID);
 	}
+}
+
+void UStatusEffectBase::SetIgnoredByCrowdManager(bool bInIgnoredByCrowdManager)
+{
+	if (bIgnoredByCrowdManager == bInIgnoredByCrowdManager)
+	{
+		return;
+	}
+
+	UStatusComponent* StatusComponent = GetOwningStatusComponent();
+
+	if (!StatusComponent)
+	{
+		return;
+	}
+
+	ACoreCharacter* Character = StatusComponent->GetOwner<ACoreCharacter>();
+
+	if (!Character)
+	{
+		return;
+	}
+
+	ACoreAIController* CoreAIController = Cast<ACoreAIController>(Character->GetController());
+
+	if (!CoreAIController)
+	{
+		return;
+	}
+
+	UCorePathFollowingComponent* PathFollowingComponent = Cast<UCorePathFollowingComponent>(CoreAIController->GetPathFollowingComponent());
+
+	if (!PathFollowingComponent)
+	{
+		return;
+	}
+
+	bIgnoredByCrowdManager = bInIgnoredByCrowdManager;
+	if (bIgnoredByCrowdManager)
+	{
+		PathFollowingComponent->RequestIgnoredByCrowdManager(this);
+	}
+	else
+	{
+		PathFollowingComponent->RevokeIgnoredByCrowdManager(this);
+	}
+}
+
+void UStatusEffectBase::ResetIgnoredByCrowdManager()
+{
+	SetIgnoredByCrowdManager(false);
+}
+
+void UStatusEffectBase::SetPerformPanicMovement(bool bInPerformPanicMovement)
+{
+	if (bPerformingPanicMovement == bInPerformPanicMovement)
+	{
+		return;
+	}
+}
+
+void UStatusEffectBase::ResetPerformPanicMovement()
+{
+	SetPerformPanicMovement(false);
 }
 
 #define BIND_STAT_MODIFIER(Delegate, ...)\

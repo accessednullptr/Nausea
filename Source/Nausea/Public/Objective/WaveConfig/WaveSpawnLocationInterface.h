@@ -9,7 +9,7 @@
 
 class ACoreCharacter;
 
-UINTERFACE(Blueprintable, MinimalAPI)
+UINTERFACE(Blueprintable)
 class UWaveSpawnLocationInterface : public UInterface
 {
 	GENERATED_UINTERFACE_BODY()

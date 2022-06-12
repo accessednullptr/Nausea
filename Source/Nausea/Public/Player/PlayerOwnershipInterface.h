@@ -15,7 +15,7 @@
 class ACorePlayerState;
 
 UINTERFACE()
-class UPlayerOwnershipInterface : public UInterface
+class NAUSEA_API UPlayerOwnershipInterface : public UInterface
 {
 	GENERATED_UINTERFACE_BODY()
 };

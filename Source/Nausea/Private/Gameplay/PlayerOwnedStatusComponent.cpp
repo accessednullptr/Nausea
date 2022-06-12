@@ -102,10 +102,14 @@ void UPlayerOwnedStatusComponent::TakeDamage(AActor* Actor, float& DamageAmount,
 
 void UPlayerOwnedStatusComponent::Died(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	if (GetOwningPlayerState() && GetOwningPlayerState()->OnPlayerClassChanged.IsAlreadyBound(this, &UPlayerOwnedStatusComponent::OnPlayerClassChanged))
+	if (GetOwningPlayerState())
 	{
 		GetOwningPlayerState()->SetIsAlive(false);
-		GetOwningPlayerState()->OnPlayerClassChanged.RemoveDynamic(this, &UPlayerOwnedStatusComponent::OnPlayerClassChanged);
+
+		if (GetOwningPlayerState()->OnPlayerClassChanged.IsAlreadyBound(this, &UPlayerOwnedStatusComponent::OnPlayerClassChanged))
+		{
+			GetOwningPlayerState()->OnPlayerClassChanged.RemoveDynamic(this, &UPlayerOwnedStatusComponent::OnPlayerClassChanged);
+		}
 	}
 
 	Super::Died(Damage, DamageEvent, EventInstigator, DamageCauser);

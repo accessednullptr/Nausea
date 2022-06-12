@@ -10,7 +10,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FTargetableStateChanged, AActor*, Actor, bool, bIsTargetable);
 
 UINTERFACE(Blueprintable)
-class UAITargetInterface : public UInterface
+class NAUSEA_API UAITargetInterface : public UInterface
 {
 	GENERATED_UINTERFACE_BODY()
 };

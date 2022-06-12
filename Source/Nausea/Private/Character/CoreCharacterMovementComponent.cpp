@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Stats/Stats.h"
 #include "Components/CapsuleComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Character/CoreCharacter.h"
 #include "Weapon/InventoryManagerComponent.h"
 #include "Gameplay/StatusComponent.h"
@@ -26,6 +27,8 @@ UCoreCharacterMovementComponent::UCoreCharacterMovementComponent(const FObjectIn
 
 void UCoreCharacterMovementComponent::BeginPlay()
 {
+	SetGroundMovementMode(DefaultLandMovementMode);
+
 	if (GetOwnerRole() != ROLE_Authority)
 	{
 		InitializeMovementComponent();
@@ -148,7 +151,7 @@ bool UCoreCharacterMovementComponent::StepUp(const FVector& GravDir, const FVect
 
 FNetworkPredictionData_Client* UCoreCharacterMovementComponent::GetPredictionData_Client() const
 {
-	checkSlow(PawnOwner != NULL);
+	checkSlow(PawnOwner != nullptr);
 	checkSlow(PawnOwner->GetLocalRole() < ROLE_Authority || (PawnOwner->GetRemoteRole() == ROLE_AutonomousProxy && GetNetMode() == NM_ListenServer));
 	checkSlow(GetNetMode() == NM_Client || GetNetMode() == NM_ListenServer);
 

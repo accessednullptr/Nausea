@@ -2,6 +2,8 @@
 
 
 #include "Objective/WaveConfig/SpawnLocation/SpawnVolume.h"
+#include "Character/CoreCharacter.h"
+
 #if WITH_EDITOR
 #include "LevelEditor.h"
 #include "Editor.h"
@@ -17,35 +19,73 @@ ASpawnVolume::ASpawnVolume(const FObjectInitializer& ObjectInitializer)
 #endif
 }
 
-FTransform ASpawnVolume::GetSpawnLocation(TSubclassOf<ACoreCharacter> SpawnClass, int32& RequestID) const
+void ASpawnVolume::BeginPlay()
 {
-	if (WorldSpawnLocationList.Num() == 0)
+	SpawnLocationStatusList.SetNum(WorldSpawnLocationList.Num());
+
+	Super::BeginPlay();
+}
+
+bool ASpawnVolume::GetSpawnTransform(TSubclassOf<ACoreCharacter> CoreCharacter, FTransform& SpawnTransform)
+{
+	if (!CoreCharacter || WorldSpawnLocationList.Num() == 0)
 	{
-		RequestID = -1;
-		return FTransform::Identity;
+		return false;
 	}
 
-	//Check if extents fit the target before allowing it.
+	const ACoreCharacter* CharacterCDO = CoreCharacter.GetDefaultObject();
+	const float WorldTime = GetWorld()->GetTimeSeconds();
 
-	const FSpawnLocationData& SpawnLocation = WorldSpawnLocationList.IsValidIndex(RequestID) ? WorldSpawnLocationList[RequestID] : WorldSpawnLocationList[FMath::RandHelper(WorldSpawnLocationList.Num())];
+	int32 Index;
 
-	FTransform Result;
-	Result.SetLocation(SpawnLocation.Location);
+	for (Index = WorldSpawnLocationList.Num() - 1; Index >= 0; Index--)
+	{
+		if (!SpawnLocationStatusList[Index].IsAvailable(WorldTime))
+		{
+			continue;
+		}
 
-	FRotator Rotation = FRotator(0.f, FMath::RandRange(0.f, 360.f), 0.f);
-	Result.SetRotation(Rotation.Quaternion());
+		if (!GetWorld()->FindTeleportSpot(CharacterCDO, WorldSpawnLocationList[Index].Location, FRotator::ZeroRotator))
+		{
+			SpawnLocationStatusList[Index].MarkFailureTime(WorldTime);
+			continue;
+		}
 
-	return Result;
+		break;
+	}
+
+	if (!SpawnLocationStatusList.IsValidIndex(Index))
+	{
+		return false;
+	}
+
+	FSpawnLocationData& LocationData = WorldSpawnLocationList[Index];
+
+	FSpawnLocationStatusData& StatusData = SpawnLocationStatusList[Index];
+	StatusData.MarkUseTime(WorldTime);
+
+	SpawnTransform.SetLocation(LocationData.Location);
+	FRotator Forward = GetActorRotation();
+	Forward.Yaw = 0.f;
+	Forward.Yaw += FMath::RandRange(-60.f, 60.f);
+	Forward.Roll = 0.f;
+	SpawnTransform.SetRotation(Forward.Quaternion());
+	return true;
 }
 
-void ASpawnVolume::ProcessSpawn(ACoreCharacter* SpawnedCharacter, int32& RequestID)
+bool ASpawnVolume::HasAvailableSpawnTransform(TSubclassOf<ACoreCharacter> CoreCharacter) const
 {
+	const float WorldTime = GetWorld()->GetTimeSeconds();
 
-}
+	for (const FSpawnLocationStatusData& Status : SpawnLocationStatusList)
+	{
+		if (Status.IsAvailable(WorldTime))
+		{
+			return true;
+		}
+	}
 
-float ASpawnVolume::GetSpawnScore() const
-{
-	return -1.f;
+	return false;
 }
 
 #if WITH_EDITOR
@@ -67,7 +107,7 @@ static int32 MoveUpdateCounter = 0;
 void ASpawnVolume::PostEditMove(bool bFinished)
 {
 	Super::PostEditMove(bFinished);
-	
+
 	if (!bFinished && MoveUpdateCounter++ % 3 != 0)
 	{
 		return;
@@ -123,7 +163,7 @@ void ASpawnVolume::UpdateDebugCylinderList()
 	while (RemainingPlacements >= 0)
 	{
 		SpawnLocationList.Add(FSpawnLocationData(CurrentRelativeLocation, Extent));
-		
+
 		if (RemainingPlacements % RowCount == 0)
 		{
 			CurrentRelativeLocation.X = Diameter * float(RowCount - 1) * 0.5f * (1.f + PercentSpacing);

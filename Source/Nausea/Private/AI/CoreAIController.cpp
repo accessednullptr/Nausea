@@ -2,18 +2,23 @@
 
 
 #include "AI/CoreAIController.h"
+#include "NavigationSystem.h"
+#include "NavMesh/NavMeshPath.h"
 #include "AI/ActionBrainComponent.h"
 #include "AI/EnemySelectionComponent.h"
 #include "AI/RoutineManagerComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/CorePlayerState.h"
+#include "Character/CoreCharacter.h"
 #include "AI/CorePathFollowingComponent.h"
 
 ACoreAIController::ACoreAIController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer.DoNotCreateDefaultSubobject(TEXT("ActionsComp")).SetDefaultSubobjectClass<UCorePathFollowingComponent>(TEXT("PathFollowingComponent")))
 {
-
+#if WITH_EDITOR
+	//UNavigationSystemV1::SetNavigationAutoUpdateEnabled(false, nullptr);
+#endif // WITH_EDITOR
 }
 
 void ACoreAIController::BeginPlay()
@@ -58,6 +63,12 @@ void ACoreAIController::InitPlayerState()
 
 	if (ACorePlayerState* CorePlayerState = GetPlayerState<ACorePlayerState>())
 	{
+		if (bOverrideOwningTeam)
+		{
+			CachedTeamIdOverride = UPlayerOwnershipInterfaceTypes::GetGenericTeamIdFromTeamEnum(TeamOverride);
+			CorePlayerState->SetGenericTeamId(CachedTeamIdOverride);
+		}
+
 		OnReceivePlayerState(CorePlayerState);
 	}
 }

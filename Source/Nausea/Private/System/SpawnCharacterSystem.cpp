@@ -3,7 +3,18 @@
 
 #include "System/SpawnCharacterSystem.h"
 #include "System/CoreGameState.h"
+#include "System/CoreGameMode.h"
 #include "Character/CoreCharacter.h"
+
+bool FSpawnRequest::IsValid() const
+{
+	if (!CharacterClass && !SpawnDelegate.IsBound())
+	{
+		return false;
+	}
+
+	return true;
+}
 
 USpawnCharacterSystem::USpawnCharacterSystem(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -28,6 +39,22 @@ inline USpawnCharacterSystem* GetSpawnCharacterSystem(const UObject* WorldContex
 	}
 
 	return CoreGameState->GetSpawnCharacterSystem();
+}
+
+bool USpawnCharacterSystem::SpawnCharacter(const UObject* WorldContextObject, TSubclassOf<ACoreCharacter> CoreCharacterClass, const FTransform& Transform, AActor* Owner, APawn* Instigator)
+{
+	USpawnCharacterSystem* SpawnCharacterSystem = GetSpawnCharacterSystem(WorldContextObject);
+
+	if (!SpawnCharacterSystem)
+	{
+		return false;
+	}
+
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.Owner = Owner;
+	SpawnParameters.Instigator = Instigator;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	return SpawnCharacterSystem->AddRequest(FSpawnRequest(CoreCharacterClass, Transform, SpawnParameters));
 }
 
 bool USpawnCharacterSystem::RequestSpawn(const UObject* WorldContextObject, TSubclassOf<ACoreCharacter> CoreCharacterClass, const FTransform& Transform, const FActorSpawnParameters& SpawnParameters, FCharacterSpawnRequestDelegate&& Delegate)
@@ -89,7 +116,7 @@ bool USpawnCharacterSystem::AddRequest(FSpawnRequest&& SpawnRequest)
 			}
 
 			WeakThis->PerformNextSpawn();
-		}), 0.075f, false);
+		}), 0.05f, false);
 	return true;
 }
 
@@ -152,7 +179,14 @@ void USpawnCharacterSystem::PerformNextSpawn()
 
 		ACoreCharacter* Character = GetWorld()->SpawnActor<ACoreCharacter>(SpawnClass, SpawnTransform, ActorSpawnParams);
 
-		Request->BroadcastRequestResult(Character);
+		//If this broadcast was unhandled, manually notify the game mode of this spawn ourselves (otherwise expect the binding to handle it).
+		if (!Request->BroadcastRequestResult(Character))
+		{
+			if (ACoreGameMode* GameMode = GetWorld()->GetAuthGameMode<ACoreGameMode>())
+			{
+				GameMode->SetPlayerDefaults(Character);
+			}
+		}
 		CharacterSpawnRequestList.RemoveAt(0, 1, false);
 	}
 
@@ -170,5 +204,27 @@ void USpawnCharacterSystem::PerformNextSpawn()
 			}
 
 			WeakThis->PerformNextSpawn();
-		}), 0.075f, false);
+		}), 0.025f, false);
+}
+
+USpawnLocationInterface::USpawnLocationInterface(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+
+}
+
+USpawnLocationSystemLibrary::USpawnLocationSystemLibrary(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+
+}
+
+bool USpawnLocationSystemLibrary::GetSpawnLocation(TScriptInterface<ISpawnLocationInterface> Target, TSubclassOf<ACoreCharacter> CoreCharacter, FTransform& SpawnTransform)
+{
+	if (!Target)
+	{
+		return false;
+	}
+
+	return Target->GetSpawnTransform(CoreCharacter, SpawnTransform);
 }

@@ -47,6 +47,7 @@ public:
 	virtual UPlayerStatisticsComponent* GetPlayerStatisticsComponent() const override { return nullptr; }
 	virtual AController* GetOwningController() const { return const_cast<ACoreAIController*>(this); }
 	virtual APawn* GetOwningPawn() const override { return GetPawn(); }
+	virtual FGenericTeamId GetOwningTeamId() const override { return CachedTeamIdOverride; }
 //~ End IPlayerOwnershipInterface Interface
 
 public:
@@ -77,4 +78,11 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = BrainComponent)
 	URoutineManagerComponent* RoutineManagerComponent = nullptr;
+	
+	UPROPERTY(EditAnywhere, Category = Team, meta = (PinHiddenByDefault, InlineEditConditionToggle))
+	bool bOverrideOwningTeam = false;
+	UPROPERTY(EditDefaultsOnly, Category = Team, meta = (EditCondition = "bOverrideOwningTeam"))
+	ETeam TeamOverride = ETeam::NoTeam;
+	UPROPERTY(Transient)
+	FGenericTeamId CachedTeamIdOverride = FGenericTeamId::NoTeam;
 };

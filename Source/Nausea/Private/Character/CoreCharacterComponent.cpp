@@ -2,6 +2,7 @@
 
 
 #include "Character/CoreCharacterComponent.h"
+#include "Player/CorePlayerState.h"
 #include "Character/CoreCharacter.h"
 #include "Gameplay/StatusComponent.h"
 

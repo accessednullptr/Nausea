@@ -16,7 +16,7 @@
 UCorePathFollowingComponent::UCorePathFollowingComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	bAffectFallingVelocity = true;
+	bAffectFallingVelocity = true;	
 }
 
 void UCorePathFollowingComponent::BeginPlay()
@@ -28,6 +28,8 @@ void UCorePathFollowingComponent::BeginPlay()
 		CoreAIPerceptionComponent = Cast<UCoreAIPerceptionComponent>(AIController->GetPerceptionComponent());
 		ensure(CoreAIPerceptionComponent);
 	}
+
+	DefaultCrowdSimulationState = GetCrowdSimulationState();
 }
 
 void UCorePathFollowingComponent::OnMoveBlockedBy(const FHitResult& BlockingImpact)
@@ -142,4 +144,120 @@ FVector UCorePathFollowingComponent::GetMoveFocus(bool bAllowStrafe) const
 	}
 
 	return Super::GetMoveFocus(false);
+}
+
+void UCorePathFollowingComponent::OnPathFinished(const FPathFollowingResult& Result)
+{
+	if (!Path.IsValid() || !Path->IsValid())
+	{
+		Super::OnPathFinished(Result);
+		return;
+	}
+
+	Super::OnPathFinished(Result);
+}
+
+bool UCorePathFollowingComponent::RequestIgnoredByCrowdManager(TObjectKey<UObject> Requester)
+{
+	if (!Requester.ResolveObjectPtr())
+	{
+		return false;
+	}
+
+	IgnoredByCrowdManagerRequestList.Add(Requester);
+
+	UpdateIgnoredByCrowdManager();
+	return true;
+}
+
+bool UCorePathFollowingComponent::RevokeIgnoredByCrowdManager(TObjectKey<UObject> Requester)
+{
+	if (!Requester.ResolveObjectPtr())
+	{
+		return false;
+	}
+
+	IgnoredByCrowdManagerRequestList.Remove(Requester);
+	UpdateIgnoredByCrowdManager();
+	return true;
+}
+
+bool UCorePathFollowingComponent::RequestPerformPanicMovement(TObjectKey<UObject> Requester)
+{
+	if (!Requester.ResolveObjectPtr())
+	{
+		return false;
+	}
+
+	PerformPanicMovementRequestList.Add(Requester);
+	UpdatePerformPanicMovement();
+	return true;
+}
+
+bool UCorePathFollowingComponent::RevokePerformPanicMovement(TObjectKey<UObject> Requester)
+{
+	if (!Requester.ResolveObjectPtr())
+	{
+		return false;
+	}
+
+	PerformPanicMovementRequestList.Remove(Requester);
+	UpdatePerformPanicMovement();
+	return true;
+}
+
+void UCorePathFollowingComponent::UpdateIgnoredByCrowdManager()
+{
+	TArray<TObjectKey<UObject>> CurrentRequestList = IgnoredByCrowdManagerRequestList.Array();
+	for (const TObjectKey<UObject>& Requester : CurrentRequestList)
+	{
+		if (!Requester.ResolveObjectPtr())
+		{
+			IgnoredByCrowdManagerRequestList.Remove(Requester);
+		}
+	}
+
+	const bool bNewIgnoredByCrowdManager = IgnoredByCrowdManagerRequestList.Num() != 0;
+
+	if (bIgnoredByCrowdManager == bNewIgnoredByCrowdManager)
+	{
+		return;
+	}
+
+	bIgnoredByCrowdManager = bNewIgnoredByCrowdManager;
+	
+	const ECrowdSimulationState NewSimulationState = bIgnoredByCrowdManager ? ECrowdSimulationState::Disabled : DefaultCrowdSimulationState;
+
+	if (NewSimulationState == GetCrowdSimulationState())
+	{
+		return;
+	}
+
+	if (GetStatus() != EPathFollowingStatus::Idle)
+	{
+		AbortMove(*this, FPathFollowingResultFlags::OwnerFinished, GetCurrentRequestId(), EPathFollowingVelocityMode::Keep);
+	}
+
+	SetCrowdSimulationState(bIgnoredByCrowdManager ? ECrowdSimulationState::Disabled : DefaultCrowdSimulationState);
+}
+
+void UCorePathFollowingComponent::UpdatePerformPanicMovement()
+{
+	TArray<TObjectKey<UObject>> CurrentRequestList = PerformPanicMovementRequestList.Array();
+	for (const TObjectKey<UObject>& Requester : CurrentRequestList)
+	{
+		if (!Requester.ResolveObjectPtr())
+		{
+			PerformPanicMovementRequestList.Remove(Requester);
+		}
+	}
+
+	const bool bNewPerformPanicMovement = PerformPanicMovementRequestList.Num() != 0;
+
+	if (bPerformPanicMovement == bNewPerformPanicMovement)
+	{
+		return;
+	}
+
+
 }

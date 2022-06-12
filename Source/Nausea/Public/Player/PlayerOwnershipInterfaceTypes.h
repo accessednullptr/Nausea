@@ -22,8 +22,8 @@ enum class ETeam : uint8
 	NoTeam = 255
 };
 
-UCLASS(Abstract, MinimalAPI)
-class UPlayerOwnershipInterfaceTypes : public UBlueprintFunctionLibrary
+UCLASS(Abstract)
+class NAUSEA_API UPlayerOwnershipInterfaceTypes : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 

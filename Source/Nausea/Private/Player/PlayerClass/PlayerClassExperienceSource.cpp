@@ -2,7 +2,9 @@
 
 
 #include "Player/PlayerClass/PlayerClassExperienceSource.h"
+#include "Player/CorePlayerController.h"
 #include "Player/PlayerClassComponent.h"
+#include "Player/PlayerStatistics/PlayerStatisticsComponent.h"
 #include "Player/PlayerStatistics/PlayerStatisticsTypes.h"
 
 UPlayerClassExperienceSource::UPlayerClassExperienceSource(const FObjectInitializer& ObjectInitializer)

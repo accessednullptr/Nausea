@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/DamageType.h"
 #include "Gameplay/StatusType.h"
+#include "Gameplay/DamageLogInterface.h"
 #include "CoreDamageType.generated.h"
 
 class AActor;
@@ -31,9 +32,14 @@ enum class EApplicationResult : uint8
  * 
  */
 UCLASS()
-class NAUSEA_API UCoreDamageType : public UDamageType
+class UCoreDamageType : public UDamageType, public IDamageLogInterface
 {
 	GENERATED_UCLASS_BODY()
+
+//~ Begin IDamageLogInterface Interface
+public:
+	virtual FText GetDamageLogInstigatorName() const { return DamageTypeName; }
+//~ End IDamageLogInterface Interface
 
 public:
 	float GetDamageAmount() const { return DamageAmount; }
@@ -118,6 +124,9 @@ protected:
 	//Should this effect power be multiplied by frame delta time?
 	UPROPERTY(EditDefaultsOnly, Category = StatusEffect)
 	bool bScaleStatusEffectPowerByFrameDeltaTime = false;
+
+	UPROPERTY(EditDefaultsOnly, Category = DamageLog)
+	FText DamageTypeName = FText();
 
 	//If true will buffer this damage log event and group it with future matching damage logs. Enable for damage that is applied every frame.
 	UPROPERTY(EditDefaultsOnly, Category = DamageLog)

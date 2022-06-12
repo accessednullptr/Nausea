@@ -16,7 +16,7 @@ enum class ESkipReplicationLogic : uint8
 	SkipOwnerInitialOnNonNetOwner //Skip replicating this subobject if we're in the owner's initial bunch ONLY if we're not the NetOwner (bNetOwner in RepFlags) of this actor.
 };
 
-UINTERFACE(MinimalAPI)
+UINTERFACE()
 class UReplicatedObjectInterface : public UInterface
 {
 	GENERATED_UINTERFACE_BODY()
@@ -30,13 +30,13 @@ class NAUSEA_API IReplicatedObjectInterface
 	GENERATED_IINTERFACE_BODY()
 
 public:
-	FORCEINLINE bool ShouldSkipReplication(UActorChannel* OwnerActorChannel, FReplicationFlags* OwnerRepFlags) const;
-	FORCEINLINE void SetSkipReplicationLogic(ESkipReplicationLogic Logic);
+	bool ShouldSkipReplication(UActorChannel* OwnerActorChannel, FReplicationFlags* OwnerRepFlags) const;
+	void SetSkipReplicationLogic(ESkipReplicationLogic Logic);
 	
-	FORCEINLINE bool HasPendingReplicatedSubobjects(UActorChannel* OwnerActorChannel) const;
+	bool HasPendingReplicatedSubobjects(UActorChannel* OwnerActorChannel) const;
 	bool ReplicateSubobjectList(UActorChannel* OwnerActorChannel, class FOutBunch* Bunch, FReplicationFlags* RepFlags);
 
-	FORCEINLINE bool RegisterReplicatedSubobject(UObject* Subobject);
+	bool RegisterReplicatedSubobject(UObject* Subobject);
 
 	template<class T>
 	bool RegisterReplicatedSubobjects(TArray<T*> SubobjectList)
@@ -51,8 +51,8 @@ public:
 		return bRegisteredAll;
 	}
 
-	FORCEINLINE bool UnregisterReplicatedSubobject(UObject* Subobject);
-	FORCEINLINE bool ClearReplicatedSubobjectList();
+	bool UnregisterReplicatedSubobject(UObject* Subobject);
+	bool ClearReplicatedSubobjectList();
 	
 
 private:

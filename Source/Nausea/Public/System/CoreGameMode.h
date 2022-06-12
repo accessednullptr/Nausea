@@ -37,16 +37,23 @@ protected:
 //~ End AGameMode Interface
 
 public:
+	UFUNCTION(BlueprintCallable, Category = GameMode)
+	uint8 GetGameDifficulty() const;
+
+	uint8 GetDefaultGameDifficulty() const { return DefaultDifficulty; }
+
+public:
+	UPROPERTY(BlueprintAssignable, Category = GameMode)
+	FPlayerKilledSignature OnPlayerKilled;
+	
+protected:
 	UFUNCTION()
 	void PlayerKilled(UStatusComponent* Component, float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 
 	UFUNCTION()
 	virtual void NotifyKilled(AController* Killer, AController* Killed, ACoreCharacter* KilledCharacter, const struct FDamageEvent& DamageEvent);
 
-public:
-	UPROPERTY(BlueprintAssignable, Category = GameMode)
-	FPlayerKilledSignature OnPlayerKilled;
-
+protected:
 	UPROPERTY(globalconfig)
 	uint8 DefaultDifficulty = 0;
 };

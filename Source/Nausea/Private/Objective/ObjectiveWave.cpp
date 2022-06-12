@@ -206,7 +206,8 @@ int32 UObjectiveWave::RequestSpawn(TArray<TSubclassOf<ACoreCharacter>>& SpawnReq
 			continue;
 		}
 
-		const bool bResult = USpawnCharacterSystem::RequestSpawn(this, PlayerClass, SpawnTransform, ActorSpawnParams, FCharacterSpawnRequestDelegate::CreateWeakLambda(DelegateOwner, [WeakThis, WeakWaveConfig, PlayerClass, SpawnTransform, SpawnRequestID] (ACoreCharacter* Character)
+		const bool bResult = USpawnCharacterSystem::RequestSpawn(this, PlayerClass, SpawnTransform, ActorSpawnParams,
+			FCharacterSpawnRequestDelegate::CreateWeakLambda(DelegateOwner, [WeakThis, WeakWaveConfig, PlayerClass, SpawnTransform, SpawnRequestID] (const FSpawnRequest& Request, ACoreCharacter* Character)
 			{
 				if (!Character || !WeakThis.IsValid())
 				{

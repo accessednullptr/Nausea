@@ -20,11 +20,6 @@ void UNauseaWidgetComponent::InitWidget()
 	}
 
 	Super::InitWidget();
-
-	if (UCoreUserWidget* CoreUserWidget = Cast<UCoreUserWidget>(GetWidget()))
-	{
-		CoreUserWidget->InitializeWidgetComponent(this);
-	}
 }
 
 bool UNauseaWidgetComponent::ShouldHideWidget() const

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Volume.h"
-#include "Objective/WaveConfig/WaveSpawnLocationInterface.h"
+#include "System/SpawnCharacterSystem.h"
 #include "DebugRenderSceneProxy.h"
 #include "Components/PrimitiveComponent.h"
 #include "SpawnVolume.generated.h"
@@ -14,6 +14,7 @@ struct FSpawnLocationData
 {
 	GENERATED_USTRUCT_BODY()
 
+public:
 	FSpawnLocationData() {}
 
 	FSpawnLocationData(const FVector& InLocation, const FVector2D& InExtent)
@@ -34,13 +35,45 @@ public:
 	FVector2D CylinderExtent = FVector2D(0.f);
 };
 
+//This is paired with a given FSpawnLocationData entry. Contains availability information.
+USTRUCT(BlueprintType)
+struct FSpawnLocationStatusData
+{
+	GENERATED_USTRUCT_BODY()
+	
+public:
+	FSpawnLocationStatusData() {}
+
+	FORCEINLINE bool IsAvailable(const float WorldTime) const { return bEnabled && !IsCoolingDown(WorldTime); }
+	FORCEINLINE bool IsCoolingDown(const float WorldTime) const { return (WorldTime - MostRecentUseTime) < 3.f || (WorldTime - MostRecentFailureTime) < 1.f;  }
+
+	void MarkUseTime(const float WorldTime) { MostRecentUseTime = WorldTime; }
+	void MarkFailureTime(const float WorldTime) { MostRecentFailureTime = WorldTime; }
+
+	void Enable() { bEnabled = true; }
+	void Disable() { bEnabled = false; }
+
+protected:
+	UPROPERTY(Transient)
+	float MostRecentUseTime = -MAX_FLT;
+	UPROPERTY(Transient)
+	float MostRecentFailureTime = -MAX_FLT;
+	UPROPERTY(Transient)
+	bool bEnabled = true;
+};
+
 /**
  * 
  */
 UCLASS()
-class NAUSEA_API ASpawnVolume : public AVolume, public IWaveSpawnLocationInterface
+class NAUSEA_API ASpawnVolume : public AVolume, public ISpawnLocationInterface
 {
 	GENERATED_UCLASS_BODY()
+
+//~ Begin AActor Interface
+public:
+	virtual void BeginPlay() override;
+//~ End AActor Interface
 
 #if WITH_EDITOR
 //~ Begin UObject Interface
@@ -56,12 +89,11 @@ public:
 //~ End AActor Interface
 #endif //WITH_EDITOR
 
-//~ Begin IWaveSpawnLocationInterface Interface
+//~ Begin ISpawnLocationInterface Interface
 public:
-	virtual FTransform GetSpawnLocation(TSubclassOf<ACoreCharacter> SpawnClass, int32& RequestID) const override;
-	virtual void ProcessSpawn(ACoreCharacter* SpawnedCharacter, int32& RequestID) override;
-	virtual float GetSpawnScore() const override;
-//~ End IWaveSpawnLocationInterface Interface
+	virtual bool GetSpawnTransform(TSubclassOf<ACoreCharacter> CoreCharacter, FTransform& SpawnTransform);
+	virtual bool HasAvailableSpawnTransform(TSubclassOf<ACoreCharacter> CoreCharacter) const;
+//~ End ISpawnLocationInterface Interface
 
 protected:
 	//If larger than 0, will limit the amount of spawn locations this volume will generate.
@@ -83,6 +115,9 @@ protected:
 	TArray<FSpawnLocationData> SpawnLocationList;
 	UPROPERTY()
 	TArray<FSpawnLocationData> WorldSpawnLocationList;
+
+	UPROPERTY(Transient)
+	TArray<FSpawnLocationStatusData> SpawnLocationStatusList;
 
 #if WITH_EDITOR
 protected:

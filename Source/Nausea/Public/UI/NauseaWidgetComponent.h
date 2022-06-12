@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/WidgetComponent.h"
+#include "UI/CoreWidgetComponent.h"
 #include "NauseaWidgetComponent.generated.h"
 
 /**
  * Adds context information so that UCoreUserWidgets are able to generically know if they are WidgetComponent widgets and who their owners are.
  */
 UCLASS(Blueprintable, meta=(BlueprintSpawnableComponent))
-class NAUSEA_API UNauseaWidgetComponent : public UWidgetComponent
+class NAUSEA_API UNauseaWidgetComponent : public UCoreWidgetComponent
 {
 	GENERATED_UCLASS_BODY()
 

@@ -93,6 +93,7 @@ struct FDamageLogEventModifier
 class AController;
 class UCoreDamageType;
 
+
 USTRUCT(BlueprintType)
 struct FDamageLogEvent
 {
@@ -102,14 +103,12 @@ struct FDamageLogEvent
 
 	FDamageLogEvent(float InTimeStamp, float InDamageInitial, UObject* InInstigator, const FGenericTeamId& InInstigatorTeam,
 		UObject* InInstigatorWeaponClass, UObject* InInstigatorFireMode, TSubclassOf<UCoreDamageType> InInstigatorDamageType)
+			: InstigatorWeaponClass(InInstigatorWeaponClass), InstigatorDamageType(InInstigatorDamageType)
 	{
 		TimeStamp = InTimeStamp;
 		DamageInitial = InDamageInitial;
 
 		Instigator = InInstigator;
-		InstigatorWeaponClass = InInstigatorWeaponClass;
-		InstigatorFireModeClass = InInstigatorFireMode;
-		InstigatorDamageType = InInstigatorDamageType;
 
 		InstigatorTeam = InInstigatorTeam;
 		ModifierList = TArray<FDamageLogEventModifier>();
@@ -150,8 +149,6 @@ public:
 	TWeakObjectPtr<UObject> Instigator = nullptr;
 	UPROPERTY()
 	TWeakObjectPtr<UObject> InstigatorWeaponClass = nullptr;
-	UPROPERTY()
-	TWeakObjectPtr<UObject> InstigatorFireModeClass = nullptr;
 	UPROPERTY()
 	TSubclassOf<UCoreDamageType> InstigatorDamageType = nullptr;
 	UPROPERTY()

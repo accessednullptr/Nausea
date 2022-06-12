@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Tickable.h"
+#include "GameplayTags/Classes/GameplayTagContainer.h"
 #include "CoreSingleton.generated.h"
 
 class UGameInstance;
@@ -39,10 +40,28 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Singleton, meta = (WorldContext = "WorldContextObject", CallableWithoutWorldContext))
 	static void UnbindFromSingletonTick(const UObject* WorldContextObject, FOnSingletonTickSignature Delegate);
 
+	static void RegisterActorWithTag(const UObject* WorldContextObject, AActor* Actor, const FGameplayTagContainer& Tag);
+	static void UnregisterActorWithTag(const UObject* WorldContextObject, AActor* Actor, const FGameplayTagContainer& Tag);
+	static void GetActorsWithTag(const UObject* WorldContextObject, TArray<AActor*>& ActorList, const FGameplayTagContainer& Tag);
+
+	UFUNCTION(BlueprintCallable, Category = Singleton, meta = (WorldContext = "WorldContextObject", CallableWithoutWorldContext, DisplayName = "Register Actor With Tag"))
+	static void K2_RegisterActorWithTag(const UObject* WorldContextObject, AActor* Actor, FGameplayTagContainer Tag) { RegisterActorWithTag(WorldContextObject, Actor, Tag); }
+	UFUNCTION(BlueprintCallable, Category = Singleton, meta = (WorldContext = "WorldContextObject", CallableWithoutWorldContext, DisplayName = "Unregister Actor With Tag"))
+	static void K2_UnregisterActorWithTag(const UObject* WorldContextObject, AActor* Actor, FGameplayTagContainer Tag) { UnregisterActorWithTag(WorldContextObject, Actor, Tag); }
+	UFUNCTION(BlueprintCallable, Category = Singleton, meta = (WorldContext = "WorldContextObject", CallableWithoutWorldContext, DisplayName = "Get Actors With Tag"))
+	static TArray<AActor*> K2_GetActorsWithTag(const UObject* WorldContextObject, FGameplayTagContainer Tag)
+	{
+		static TArray<AActor*> ResultList;
+		GetActorsWithTag(WorldContextObject, ResultList, Tag);
+		return ResultList;
+	}
+
 private:
 	UPROPERTY(Transient, DuplicateTransient)
 	TArray<FOnSingletonTickSignature> SingletonTickCallbackList;
 
-	UPROPERTY()
+	UPROPERTY(Transient)
 	TWeakObjectPtr<UGameInstance> GameInstance = nullptr;
+
+	TMap<FGameplayTag, TArray<TWeakObjectPtr<AActor>>> ActorGameplayTagMap = TMap<FGameplayTag, TArray<TWeakObjectPtr<AActor>>>();
 };

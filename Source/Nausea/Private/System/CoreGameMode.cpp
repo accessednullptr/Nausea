@@ -14,7 +14,7 @@ const FString ACoreGameMode::OptionModifiers = FString(TEXT("Modifiers"));
 ACoreGameMode::ACoreGameMode(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-
+	GameStateClass = ACoreGameState::StaticClass();
 }
 
 void ACoreGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
@@ -100,6 +100,16 @@ bool ACoreGameMode::ReadyToStartMatch_Implementation()
 	}
 
 	return true;
+}
+
+uint8 ACoreGameMode::GetGameDifficulty() const
+{
+	if (const ACoreGameState* CoreGameState = GetGameState<ACoreGameState>())
+	{
+		return CoreGameState->GetGameDifficulty();
+	}
+
+	return GetDefaultGameDifficulty();
 }
 
 void ACoreGameMode::PlayerKilled(UStatusComponent* Component, float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

@@ -15,7 +15,7 @@ class UPlayerStatisticsComponent;
 class ACorePlayerState;
 class UPlayerClassComponent;
 class ACoreCharacter;
-class UNauseaWidgetComponent;
+class UCoreWidgetComponent;
 
 /**
  * 
@@ -40,10 +40,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Widget")
 	void K2_SetWidgetMinimumDesiredSize(const FVector2D& InMinimumDesiredSize);
 
-	virtual void InitializeWidgetComponent(UNauseaWidgetComponent* OwningComponent);
+	virtual void InitializeWidgetComponent(UCoreWidgetComponent* OwningComponent);
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Widget")
-	UNauseaWidgetComponent* GetWidgetComponent() const;
+	UCoreWidgetComponent* GetWidgetComponent() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Widget")
 	bool IsWidgetComponentWidget() const;
@@ -80,7 +80,7 @@ protected:
 	void OnWidgetReleasedToPool();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCosmetic, Category = "Widget")
-	void OnReceivedWidgetComponent(UNauseaWidgetComponent* WidgetComponent);
+	void OnReceivedWidgetComponent(UCoreWidgetComponent* WidgetComponent);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Widget")
@@ -94,7 +94,7 @@ protected:
 
 private:
 	UPROPERTY(Transient)
-	UNauseaWidgetComponent* OwningWidgetComponent = nullptr;
+	UCoreWidgetComponent* OwningWidgetComponent = nullptr;
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCoreWidgetLoadedSignature, UObject*, Object, TSubclassOf<UCoreUserWidget>, WidgetClass);

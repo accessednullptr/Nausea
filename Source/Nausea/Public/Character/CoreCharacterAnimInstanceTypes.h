@@ -118,6 +118,8 @@ struct FStatusAnimationMontageContainer : public FAnimationMontageContainer
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Animation)
 	bool bRestartAnimationOnRefresh = false;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Animation)
+	float StopBlendTime = 0.2f;
 };
 
 USTRUCT(BlueprintType)
